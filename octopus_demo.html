@@ -1,0 +1,2931 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OctOpus v10 - Research Report</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=3">
+  <link rel="shortcut icon" href="/favicon.ico?v=3">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7c6ff7">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://octoopus.dev/">
+  <meta property="og:title" content="OctOpus | The Cursor for Data Science">
+  <meta property="og:description"
+    content="Connect your data. Describe your goal. Get models built and deployed automatically.">
+  <meta property="og:image" content="https://www.octoopus.dev/social-card.png?v=29">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://octoopus.dev/">
+  <meta property="twitter:title" content="OctOpus | The Cursor for Data Science">
+  <meta property="twitter:description"
+    content="Connect your data. Describe your goal. Get models built and deployed automatically.">
+  <meta property="twitter:image" content="https://www.octoopus.dev/social-card.png?v=29">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #080810;
+      --bg2: #10101a;
+      --bg3: #18181f;
+      --bg4: #20202a;
+      --border: #252535;
+      --purple: #7c6ff7;
+      --pdim: #1e1a3a;
+      --text: #e2e2f0;
+      --text2: #7070a0;
+      --text3: #404058;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --red: #e24b4a;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background: #05050a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100%;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .shell {
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .narr-bar {
+      height: 32px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ni {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .ni.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nd {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--purple);
+      flex-shrink: 0;
+    }
+
+    .nt {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .ns {
+      font-size: 9px;
+      color: var(--text3);
+      padding: 1px 6px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 14px;
+      height: 38px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .nav-brand {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .nav-url {
+      font-size: 10px;
+      color: var(--text3);
+      margin-left: 1px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .nav-link {
+      font-size: 10px;
+      color: var(--text3);
+      white-space: nowrap;
+    }
+
+    .nav-arrow {
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    .octo-pixel {
+      width: 1px;
+      height: 1px;
+      position: relative;
+      background: transparent;
+      image-rendering: pixelated;
+    }
+
+    .octo-nav {
+      transform: scale(1.25);
+      transform-origin: top left;
+    }
+
+    .octo-hero {
+      transform: scale(3.75);
+      transform-origin: top center;
+    }
+
+    .octo-topbar {
+      transform: scale(1.125);
+      transform-origin: top left;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-5px)
+      }
+    }
+
+    .nbtn {
+      font-size: 10px;
+      padding: 4px 11px;
+      border-radius: 6px;
+      cursor: default;
+      font-weight: 500;
+    }
+
+    .nbtn.out {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .nbtn.pri {
+      background: var(--purple);
+      color: #fff;
+      border: none;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      height: 38px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .lt {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .pipe {
+      color: var(--border);
+    }
+
+    .rn {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .ml {
+      margin-left: auto;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 500;
+      border: 1px solid;
+    }
+
+    .tabs {
+      display: flex;
+      padding: 0 14px;
+      height: 32px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      align-items: flex-end;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .tab {
+      font-size: 10px;
+      color: var(--text3);
+      padding: 0 8px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .tab.on {
+      color: var(--text);
+      border-bottom-color: var(--purple);
+    }
+
+    .tdot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: none;
+    }
+
+    .tab.hd .tdot {
+      display: inline-block;
+    }
+
+    .viewport {
+      width: 100%;
+      height: 310px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .zwrap {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.4, 0, .2, 1);
+      transform-origin: center center;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    .scene.on {
+      opacity: 1;
+    }
+
+    .row {
+      display: flex;
+      height: 100%;
+    }
+
+    .main {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .pad {
+      padding: 11px 14px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .rp {
+      width: 182px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rpt-row {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rpt {
+      flex: 1;
+      font-size: 10px;
+      color: var(--text3);
+      padding: 7px 0;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .rpt.on {
+      color: var(--purple);
+      border-bottom-color: var(--purple);
+    }
+
+    .rp-body {
+      flex: 1;
+      padding: 9px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .rl {
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .pc {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 9px;
+    }
+
+    .pr {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      margin-bottom: 3px;
+    }
+
+    .pk {
+      color: var(--text3);
+    }
+
+    .pv {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .ag {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 9px;
+    }
+
+    .an {
+      font-size: 9px;
+      color: var(--purple);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .at {
+      font-size: 10px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .ok {
+      color: var(--green);
+    }
+
+    .warn-b {
+      background: #1e1800;
+      border: 1px solid #3a2a00;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 9px;
+      color: var(--amber);
+      line-height: 1.4;
+    }
+
+    .exec-b {
+      background: var(--purple);
+      color: #fff;
+      font-size: 10px;
+      padding: 5px;
+      border-radius: 5px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .rp-inp-w {
+      border-top: 1px solid var(--border);
+      padding: 7px 8px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .rp-inp {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 5px 9px;
+      font-size: 10px;
+      color: var(--text);
+      outline: none;
+    }
+
+    .send-b {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .send-b svg {
+      width: 9px;
+      height: 9px;
+    }
+
+    .mouse {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0;
+      transition: left 0.65s cubic-bezier(.4, 0, .2, 1), top 0.65s cubic-bezier(.4, 0, .2, 1), opacity 0.3s;
+    }
+
+    .mouse svg {
+      width: 16px;
+      height: 16px;
+      filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.9));
+    }
+
+    .cring {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--purple);
+      top: -4px;
+      left: -4px;
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    .bottom {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .ptrack {
+      height: 2px;
+      background: var(--border);
+    }
+
+    .pfill {
+      height: 100%;
+      background: var(--purple);
+      width: 0%;
+    }
+
+    .sinfo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 14px;
+    }
+
+    .snum {
+      font-size: 9px;
+      color: var(--text3);
+    }
+
+    .sdots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .sd {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+
+    .sd.on {
+      background: var(--purple);
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-5px)
+      }
+    }
+
+    @keyframes tsway {
+
+      0%,
+      100% {
+        transform: rotate(0deg)
+      }
+
+      50% {
+        transform: rotate(3deg)
+      }
+    }
+
+    @keyframes beye {
+
+      0%,
+      90%,
+      100% {
+        transform: scaleY(1)
+      }
+
+      95% {
+        transform: scaleY(0.1)
+      }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    @keyframes livepulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.8)
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* LANDING */
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0px)
+      }
+
+      50% {
+        transform: translateY(-4px)
+      }
+    }
+
+    .oct-wrap {
+      animation: bob 1.8s steps(3, end) infinite;
+    }
+
+    .hero-full {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0;
+      /* True centering */
+      gap: 12px;
+      background: var(--bg);
+    }
+
+    .oct-wrap {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .eye-l {
+      animation: beye 4s ease-in-out infinite;
+    }
+
+    .eye-r {
+      animation: beye 4s ease-in-out infinite;
+      animation-delay: 0.1s;
+    }
+
+    .hero-cursor {
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .hero-for-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      min-height: 20px;
+    }
+
+    .hero-for-plain {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hero-tag.active {
+      color: #fff;
+      font-weight: 600;
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    .hero-sub {
+      font-size: 10px;
+      color: var(--text3);
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .cta {
+      font-size: 11px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .cta.mac {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .cta.mac.hov {
+      background: #6b5ce7;
+      transform: translateY(-2px);
+    }
+
+    .cta.web {
+      background: rgba(124, 111, 247, .1);
+      border: 1px solid rgba(124, 111, 247, .3);
+      color: #fff;
+    }
+
+    .cta.web.hov {
+      background: rgba(124, 111, 247, .2);
+      border-color: var(--purple);
+      transform: translateY(-2px);
+    }
+
+    .tt {
+      position: absolute;
+      top: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 10px;
+      color: var(--text);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 50;
+    }
+
+    .tt.on {
+      opacity: 1;
+    }
+
+    .hero-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-size: 9px;
+      color: var(--text3);
+    }
+
+    .pill::before {
+      content: "· ";
+      color: var(--purple);
+    }
+
+    /* ONBOARDING */
+    .onb-full {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 20px;
+      gap: 10px;
+      background: var(--bg);
+    }
+
+    .role-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .role {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .role.sel {
+      border-color: var(--purple);
+      background: var(--pdim);
+    }
+
+    .rdot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .role.sel .rdot {
+      background: var(--purple);
+    }
+
+    .rname {
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .rdesc {
+      font-size: 10px;
+      color: var(--text3);
+    }
+
+    .cont-btn {
+      background: var(--purple);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 26px;
+      border-radius: 8px;
+    }
+
+    .preview-mode {
+      padding: 0;
+      background: #05050a;
+    }
+
+    .preview-mode .wrap {
+      max-width: none;
+      height: 100%;
+    }
+
+    .preview-mode .shell {
+      height: 100%;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .preview-mode .nav,
+    .preview-mode .topbar,
+    .preview-mode .tabs,
+    .preview-mode .bottom,
+    .preview-mode .mouse {
+      display: none !important;
+    }
+
+    .preview-mode .narr-bar {
+      height: 58px;
+      background: #11111a;
+      border-bottom-color: #2a2940;
+    }
+
+    .preview-mode .ni {
+      opacity: 1;
+      transform: none;
+      gap: 12px;
+    }
+
+    .preview-mode .nd {
+      width: 10px;
+      height: 10px;
+    }
+
+    .preview-mode .nt {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .preview-mode .ns {
+      font-size: 14px;
+      padding: 4px 12px;
+      color: #8d84e8;
+      border-color: #373253;
+      background: #1a1826;
+    }
+
+    .preview-mode .viewport {
+      height: calc(100% - 58px);
+    }
+
+    .preview-mode .onb-full {
+      justify-content: center;
+      padding: 44px 48px 56px;
+      gap: 18px;
+    }
+
+    .preview-mode .role-list {
+      gap: 12px;
+      max-width: 760px;
+    }
+
+    .preview-mode .role {
+      border-radius: 18px;
+      padding: 18px 28px;
+      gap: 18px;
+    }
+
+    .preview-mode .rdot {
+      width: 12px;
+      height: 12px;
+    }
+
+    .preview-mode .rname {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .preview-mode .rdesc {
+      font-size: 14px;
+    }
+
+    .preview-mode .cont-btn {
+      margin-top: 8px;
+      font-size: 16px;
+      padding: 14px 34px;
+      border-radius: 14px;
+    }
+
+    /* DATA */
+    .src-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .src {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .src.lit {
+      border-color: var(--purple);
+      background: var(--pdim);
+    }
+
+    .src-i {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      margin: 0 auto 3px;
+    }
+
+    .src-n {
+      font-size: 9px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .src-t {
+      font-size: 8px;
+      color: var(--text3);
+    }
+
+    .dz {
+      border: 1.5px dashed var(--border);
+      border-radius: 7px;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .dz.drag {
+      border-color: var(--purple);
+      background: var(--pdim);
+    }
+
+    .dz-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #0d2818;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* CHAT */
+    .chat-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .bu {
+      align-self: flex-end;
+      background: var(--purple);
+      color: #fff;
+      border-radius: 14px 14px 3px 14px;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .bu.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ba {
+      align-self: flex-start;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 3px 14px 14px 14px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.5;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .ba.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ban {
+      font-size: 9px;
+      color: var(--purple);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .tcur {
+      display: inline-block;
+      width: 2px;
+      height: 11px;
+      background: rgba(255, 255, 255, 0.8);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    /* DISC */
+    .disc {
+      background: var(--bg3);
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      padding: 10px 13px;
+      margin-bottom: 7px;
+    }
+
+    .disc-tag {
+      font-size: 9px;
+      color: var(--purple);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+
+    .disc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .dg {
+      background: var(--bg4);
+      border-radius: 5px;
+      padding: 5px 8px;
+    }
+
+    .dgk {
+      font-size: 9px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dgv {
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .go-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .go-inp {
+      flex: 1;
+      background: var(--bg4);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 9px;
+      font-size: 11px;
+      color: var(--text2);
+      font-style: italic;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .go-inp.typed {
+      color: var(--text);
+      font-style: normal;
+      border-color: var(--purple);
+    }
+
+    .go-btn {
+      background: var(--purple);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* LIVE EDITOR */
+    .live-editor {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .editor-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      flex-shrink: 0;
+    }
+
+    .editor-filename {
+      font-size: 11px;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .editor-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    .editor-btns {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ebtn {
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+    }
+
+    .ebtn.run {
+      background: var(--purple);
+      color: #fff;
+      border-color: var(--purple);
+    }
+
+    .editor-lines {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 9px;
+      line-height: 1.75;
+      color: var(--text2);
+      white-space: pre;
+    }
+
+    /* TERMINAL */
+    .terminal {
+      background: #040408;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 11px;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 9px;
+      line-height: 1.65;
+    }
+
+    .t-line {
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(2px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .t-line.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .t-err {
+      color: var(--red);
+      flex-shrink: 0;
+    }
+
+    .t-warn {
+      color: var(--amber);
+      flex-shrink: 0;
+    }
+
+    .t-ok {
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .t-sys {
+      color: var(--text3);
+      flex-shrink: 0;
+    }
+
+    .t-cmd {
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .t-txt {
+      color: var(--text2);
+    }
+
+    .repair-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e1800;
+      border: 1px solid var(--amber);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 9px;
+      color: var(--amber);
+      margin-bottom: 5px;
+    }
+
+    .spin {
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* LOGS */
+    .lhdr {
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 0;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ll {
+      font-size: 9px;
+      font-family: 'SF Mono', Monaco, monospace;
+      line-height: 1.7;
+      display: flex;
+      gap: 5px;
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .ll.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lte {
+      color: var(--text3);
+      flex-shrink: 0;
+    }
+
+    .ltr {
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .lta {
+      color: var(--purple);
+      flex-shrink: 0;
+    }
+
+    .lterr {
+      color: var(--red);
+      flex-shrink: 0;
+    }
+
+    .logt {
+      color: var(--text2);
+    }
+
+    .loghi {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .logb {
+      color: var(--red);
+    }
+
+    /* EXP BARS */
+    .exp-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 7px;
+    }
+
+    .exp-rk {
+      font-size: 9px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: var(--bg4);
+      color: var(--text3);
+      flex-shrink: 0;
+    }
+
+    .exp-n {
+      font-size: 10px;
+      color: var(--text);
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .exp-tr {
+      flex: 1;
+      height: 5px;
+      background: var(--bg3);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .exp-f {
+      height: 100%;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 1s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .exp-v {
+      font-size: 10px;
+      color: var(--text2);
+      width: 38px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* REPORT */
+    .report-wrap {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .report-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .report-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .ract {
+      font-size: 9px;
+      padding: 3px 9px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      cursor: default;
+    }
+
+    .ract.copy {
+      color: var(--text);
+    }
+
+    .report-body {
+      flex: 1;
+      overflow: hidden;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .rh1 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .rh2 {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 8px;
+      margin-bottom: 3px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+    }
+
+    .rp-txt {
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+
+    .rhi {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .rcode {
+      font-family: monospace;
+      font-size: 9px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: var(--blue);
+    }
+
+    .rsep {
+      display: flex;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 9px;
+      margin-top: 4px;
+    }
+
+    .rsep td {
+      padding: 3px 7px;
+      border: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .rsep td:first-child {
+      color: var(--text3);
+      width: 120px;
+    }
+
+    .rsep .rbest {
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    /* DOWNLOAD / PROJECT PACK */
+    .dl-wrap {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .dl-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .dl-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dl-btn-main {
+      background: var(--purple);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: default;
+      transition: opacity 0.2s;
+    }
+
+    .dl-btn-main.hl {
+      background: #6355e0;
+    }
+
+    .dl-meta {
+      font-size: 9px;
+      color: var(--text3);
+      margin-top: 1px;
+    }
+
+    .file-tree {
+      flex: 1;
+      overflow: hidden;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 9px;
+      line-height: 1.75;
+      color: var(--text2);
+    }
+
+    .ft-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 1px 0;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .ft-row.on {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .ft-ico {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      flex-shrink: 0;
+    }
+
+    .ft-ico.py {
+      background: #1a2d4a;
+      color: #60a5fa;
+    }
+
+    .ft-ico.md {
+      background: #1a1830;
+      color: #a89cf7;
+    }
+
+    .ft-ico.json {
+      background: #2d1a0a;
+      color: #f59e0b;
+    }
+
+    .ft-ico.pkl {
+      background: #0a2018;
+      color: #34d399;
+    }
+
+    .ft-ico.txt {
+      background: #1e1e24;
+      color: #888;
+    }
+
+    .ft-ico.csv {
+      background: #1a2d1a;
+      color: #22c55e;
+    }
+
+    .ft-ico.png {
+      background: #2a0d2a;
+      color: #e879f9;
+    }
+
+    .ft-ico.folder {
+      background: #1a2d4a;
+      color: #60a5fa;
+    }
+
+    .ft-ico.nb {
+      background: #2d1a00;
+      color: #f59e0b;
+    }
+
+    .ft-ico.tsv {
+      background: #1a2d1a;
+      color: #34d399;
+    }
+
+    .ft-name {
+      color: var(--text);
+    }
+
+    .ft-size {
+      color: var(--text3);
+      margin-left: auto;
+      font-size: 8px;
+    }
+
+    .ft-new {
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 99px;
+      background: #0d2818;
+      color: var(--green);
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    /* RESULTS / FORECAST */
+    .ldot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+      animation: livepulse 1.5s ease-in-out infinite;
+    }
+
+    @media (max-width: 820px), (max-aspect-ratio: 4/5) {
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .wrap {
+        max-width: 100%;
+        height: 100%;
+      }
+
+      .shell {
+        height: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+      }
+
+      .narr-bar {
+        height: 30px;
+      }
+
+      .nav {
+        height: 36px;
+        padding: 0 10px;
+      }
+
+      .nav-url,
+      .nbtn.out,
+      .hero-sub,
+      .hero-pills {
+        display: none;
+      }
+
+      .nbtn.pri {
+        font-size: 10px;
+        padding: 5px 10px;
+      }
+
+      .topbar {
+        height: 34px;
+        padding: 0 10px;
+        gap: 6px;
+      }
+
+      .lt {
+        font-size: 11px;
+      }
+
+      .rn {
+        font-size: 10px;
+      }
+
+      .tabs {
+        height: 32px;
+        padding: 0 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab {
+        flex: 0 0 auto;
+        padding: 0 10px;
+      }
+
+      .viewport {
+        flex: 1;
+        height: auto;
+        min-height: 0;
+      }
+
+      .row {
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .main {
+        min-height: 0;
+        flex: 1;
+      }
+
+      .pad {
+        padding: 8px;
+      }
+
+      .rp {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        min-height: 146px;
+        max-height: 172px;
+      }
+
+      .rpt {
+        padding: 9px 0;
+      }
+
+      .rp-body {
+        padding: 8px;
+      }
+
+      .rp-inp-w {
+        padding: 6px 8px;
+      }
+
+      .hero-full {
+        justify-content: center;
+        padding: 10px 12px 8px;
+        gap: 6px;
+      }
+
+      .octo-hero {
+        transform: scale(2.5);
+      }
+
+      .hero-cursor {
+        font-size: 16px;
+        max-width: 220px;
+      }
+
+      .hero-for-wrap {
+        min-height: auto;
+        max-width: 240px;
+      }
+
+      .hero-for-plain,
+      .hero-tag {
+        font-size: 10px;
+      }
+
+      .cta-row {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .cta.mac {
+        display: none;
+      }
+
+      .cta.web {
+        width: min(180px, 100%);
+        justify-content: center;
+        font-size: 10.5px;
+        padding: 7px 12px;
+      }
+
+      .src-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .exp-row {
+        grid-template-columns: 20px 1fr auto;
+      }
+
+      .report-wrap,
+      .dl-wrap {
+        padding-right: 0;
+      }
+    }
+
+    @media (max-width: 820px) and (max-height: 760px),
+      (max-aspect-ratio: 4/5) and (max-height: 760px) {
+      .viewport {
+        min-height: 0;
+      }
+
+      .main {
+        min-height: 0;
+      }
+
+      .rp {
+        min-height: 132px;
+        max-height: 150px;
+      }
+
+      .hero-full {
+        padding-top: 8px;
+        gap: 5px;
+      }
+
+      .octo-hero {
+        transform: scale(2.2);
+      }
+
+      .hero-cursor {
+        font-size: 14px;
+        max-width: 190px;
+      }
+
+      .hero-for-plain,
+      .hero-tag {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+    <div class="shell">
+      <div class="narr-bar">
+        <div class="ni" id="ni">
+          <div class="nd"></div>
+          <div class="nt" id="nt"></div>
+          <div class="ns" id="ns"></div>
+        </div>
+      </div>
+
+      <div class="nav" id="nav">
+        <div class="nav-logo">
+          <div style="width:22px;height:20px;display:flex;align-items:center;justify-content:center;">
+            <img src="hero-typing-transparent.webp?v=8" alt="" aria-hidden="true" decoding="async" style="width:22px;height:20px;object-fit:contain;image-rendering:pixelated;">
+          </div>
+          <span class="nav-brand">OctOpus</span>
+          <span class="nav-url">https://www.octoopus.dev/</span>
+        </div>
+        <div class="nav-right">
+          <span class="nav-arrow">→</span>
+          <div class="nbtn pri">Get started</div>
+          <span class="nav-link">https://www.octoopus.dev/app</span>
+        </div>
+      </div>
+      <div class="topbar" id="app-top" style="display:none;">
+        <div style="width:20px;height:18px;margin-right:4px;display:flex;align-items:center;justify-content:center;">
+          <img src="hero-typing-transparent.webp?v=8" alt="" aria-hidden="true" decoding="async" style="width:20px;height:18px;object-fit:contain;image-rendering:pixelated;">
+        </div>
+        <span class="lt">OctOpus</span><span class="pipe">|</span><span class="rn">Auto-ML Research</span>
+        <div class="ml"><span class="badge" id="tbadge"
+            style="background:#1a1830;color:#a89cf7;border-color:#3d2fa0;">READY</span></div>
+      </div>
+      <div class="tabs" id="app-tabs" style="display:none;">
+        <div class="tab" id="tb-data">Data</div>
+        <div class="tab hd" id="tb-code">Code<span class="tdot"></span></div>
+        <div class="tab" id="tb-prog">program.md</div>
+        <div class="tab hd" id="tb-art">Artifacts<span class="tdot"></span></div>
+        <div class="tab" id="tb-exp">Exp</div>
+        <div class="tab" id="tb-rep">Report</div>
+        <div class="tab" id="tb-res">Results</div>
+        <div class="tab" id="tb-logs">Logs</div>
+      </div>
+
+      <div class="viewport">
+        <div class="zwrap" id="zwrap">
+
+          <div class="scene on" id="s0" style="background:var(--bg);">
+            <div class="hero-full">
+              <div class="oct-wrap">
+                <div style="height:96px;display:flex;justify-content:center;align-items:center;margin-bottom:10px;">
+                  <img src="hero-typing-transparent.webp?v=8" alt="" aria-hidden="true" decoding="async" style="height:96px;width:auto;object-fit:contain;image-rendering:pixelated;">
+                </div>
+              </div>
+              <div class="hero-cursor">Cursor for Data Science</div>
+              <div class="hero-for-wrap">
+                <span class="hero-for-plain">Built for</span>
+                <span class="hero-tag ds" id="tag-ds">Data Scientists,</span>
+                <span class="hero-tag pro" id="tag-pro">Professionals</span>
+                <span class="hero-for-plain">and</span>
+                <span class="hero-tag res" id="tag-res">Researchers</span>
+              </div>
+              <div class="hero-sub">Connect your data · Describe your goal · Get the best model built and deployed while
+                you take your coffee.</div>
+              <div class="cta-row">
+                <div class="cta mac" id="cta-mac">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                    <rect x="1" y="1" width="14" height="14" rx="3" fill="#07070f" />
+                    <path d="M8 4v5M5.5 7l2.5 2.5L10.5 7" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                    <path d="M4 12h8" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                  Download for Mac
+                  <div class="tt" id="tt-mac">↓ Desktop app · macOS · Intel &amp; Apple Silicon</div>
+                </div>
+                <div class="cta web" id="cta-web">Get started free →<div class="tt" id="tt-web">→ Web version · no
+                    install · octoopus.dev/app</div>
+                </div>
+              </div>
+              <div class="hero-pills"><span class="pill">Auto model selection</span><span class="pill">One-click
+                  deploy</span><span class="pill">Any dataset format</span><span class="pill">No code required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s1" style="background:var(--bg);">
+            <div class="onb-full">
+              <div style="text-align:center;">
+                <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">What's your role?</div>
+                <div style="font-size:11px;color:var(--text2);">OctOpus adapts to how you work</div>
+              </div>
+              <div class="role-list">
+                <div class="role" id="r1">
+                  <div class="rdot"></div>
+                  <div class="rname">Data Scientist</div>
+                  <div class="rdesc">ML · Python · R · experiments</div>
+                </div>
+                <div class="role sel" id="r2">
+                  <div class="rdot"></div>
+                  <div class="rname">Finance & Analytics</div>
+                  <div class="rdesc">Revenue forecasting · risk · reporting</div>
+                </div>
+                <div class="role" id="r3">
+                  <div class="rdot"></div>
+                  <div class="rname">Researcher</div>
+                  <div class="rdesc">Academia · science · publications</div>
+                </div>
+                <div class="role" id="r4">
+                  <div class="rdot"></div>
+                  <div class="rname">Sales & Marketing</div>
+                  <div class="rdesc">Churn · lead scoring · demand</div>
+                </div>
+                <div class="role" id="r5">
+                  <div class="rdot"></div>
+                  <div class="rname">Engineer / MLOps</div>
+                  <div class="rdesc">Pipelines · deployment · APIs</div>
+                </div>
+              </div>
+              <div class="cont-btn">Continue →</div>
+            </div>
+          </div>
+
+          <div class="scene" id="s2">
+            <div class="row">
+              <div class="main pad">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Connect your dataset</div>
+                <div class="src-grid">
+                  <div class="src lit">
+                    <div class="src-i" style="background:#2d2850;color:#a89cf7;">CSV</div>
+                    <div class="src-n">CSV/Excel</div>
+                    <div class="src-t">Upload</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#0d1f3c;color:#60a5fa;">PG</div>
+                    <div class="src-n">PostgreSQL</div>
+                    <div class="src-t">Database</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#2d1a0a;color:#f59e0b;">BQ</div>
+                    <div class="src-n">BigQuery</div>
+                    <div class="src-t">Warehouse</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#0a2018;color:#34d399;">SF</div>
+                    <div class="src-n">Snowflake</div>
+                    <div class="src-t">Warehouse</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#2a0d0d;color:#f87171;">MY</div>
+                    <div class="src-n">MySQL</div>
+                    <div class="src-t">Database</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#0d1a2d;color:#7dd3fc;">RS</div>
+                    <div class="src-n">Redshift</div>
+                    <div class="src-t">Warehouse</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#1a1200;color:#fbbf24;">S3</div>
+                    <div class="src-n">Amazon S3</div>
+                    <div class="src-t">Storage</div>
+                  </div>
+                  <div class="src">
+                    <div class="src-i" style="background:#1e1e24;color:#888;">URL</div>
+                    <div class="src-n">Fetch URL</div>
+                    <div class="src-t">Any source</div>
+                  </div>
+                </div>
+                <div class="dz" id="dz">
+                  <div
+                    style="width:24px;height:24px;border-radius:4px;background:#2d2850;color:#a89cf7;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0;">
+                    CSV</div>
+                  <div style="flex:1;">
+                    <div style="font-size:11px;color:var(--text);" id="dz-n">Drop file or connect a source above</div>
+                    <div style="font-size:9px;color:var(--text3);margin-top:1px;" id="dz-m">CSV · XLSX · Parquet · JSON
+                      · up to 500MB</div>
+                  </div>
+                  <div class="dz-check" id="dz-c"><svg viewBox="0 0 10 10" fill="none">
+                      <polyline points="1.5,5 4,8 8.5,2" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt on">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Chat</div>
+                  <div class="ag" id="rp2" style="opacity:0;transition:opacity 0.4s;">
+                    <div class="an">OctOpus</div>
+                    <div class="at"><span class="ok">✓</span> Dataset profiled<br><span class="ok">✓</span> 11 columns
+                      found<br><span class="ok">✓</span> Time-series detected</div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Describe your goal..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s3">
+            <div class="row">
+              <div class="main pad">
+                <div class="chat-col">
+                  <div class="bu" id="bu3"><span id="typed"></span><span class="tcur" id="tcur"></span></div>
+                  <div class="ba" id="ba3">
+                    <div class="ban">OctOpus</div>Got it. Analyzing your dataset and building a research plan...
+                  </div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt on">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Chat</div>
+                  <div class="ag" id="rp3" style="opacity:0;transition:opacity 0.4s;">
+                    <div class="an">OctOpus</div>
+                    <div class="at">I'll write the code, run every model, and find the best one automatically.</div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="predict revenue, detect churn..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s4">
+            <div class="row">
+              <div class="main pad">
+                <div class="disc">
+                  <div class="disc-tag">⬡ DISCOVERY COMPLETE — review and say go</div>
+                  <div class="disc-grid">
+                    <div class="dg">
+                      <div class="dgk">Target</div>
+                      <div class="dgv">revenue ($)</div>
+                    </div>
+                    <div class="dg">
+                      <div class="dgk">Task</div>
+                      <div class="dgv">TimeSeriesForecasting</div>
+                    </div>
+                    <div class="dg">
+                      <div class="dgk">Metric</div>
+                      <div class="dgv">RMSE</div>
+                    </div>
+                    <div class="dg">
+                      <div class="dgk">Budget</div>
+                      <div class="dgv">8 experiments</div>
+                    </div>
+                  </div>
+                  <div class="go-row">
+                    <div class="go-inp" id="go-inp">type <strong style="color:var(--purple);">go</strong> to start →
+                    </div>
+                    <div class="go-btn">▶ Execute Plan</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt on">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Research Plan</div>
+                  <div class="pc">
+                    <div class="pr"><span class="pk">TARGET</span><span class="pv">revenue ($)</span></div>
+                    <div class="pr"><span class="pk">TASK</span><span class="pv">TimeSeriesForecasting</span></div>
+                    <div class="pr"><span class="pk">METRIC</span><span class="pv">RMSE</span></div>
+                    <div class="pr"><span class="pk">BUDGET</span><span class="pv">8 experiments</span></div>
+                  </div>
+                  <div class="warn-b">⚠ Seasonal patterns — calendar features recommended.</div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" id="go-rp" placeholder='type "go" to run...' readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s5">
+            <div class="row">
+              <div class="main pad">
+                <div class="live-editor">
+                  <div class="editor-topbar">
+                    <div class="editor-filename">
+                      <div class="editor-dot"></div>program.md
+                    </div><span style="font-size:9px;color:var(--text3);">OctOpus writing the blueprint...</span>
+                  </div>
+                  <div class="editor-lines" id="md-live"></div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt on">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at" id="rp5-txt">⟳ Writing program.md...</div>
+                  </div>
+                  <div class="pc" id="rp5-plan" style="opacity:0;transition:opacity 0.4s;">
+                    <div class="pr"><span class="pk">MODELS</span><span class="pv">8 queued</span></div>
+                    <div class="pr"><span class="pk">METRIC</span><span class="pv">RMSE</span></div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s6">
+            <div class="row">
+              <div class="main pad">
+                <div class="live-editor">
+                  <div class="editor-topbar">
+                    <div class="editor-filename">
+                      <div class="editor-dot"></div>train.py
+                    </div>
+                    <div class="editor-btns">
+                      <div class="ebtn run">▶ Run</div>
+                      <div class="ebtn">⬡ Predict CSV</div>
+                    </div>
+                  </div>
+                  <div class="editor-lines" id="py-live"></div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt on">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at" id="rp6-txt">⟳ Writing train.py...</div>
+                  </div>
+                  <div
+                    style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px;font-size:10px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span
+                        style="color:var(--text3);">Experiment</span><span style="color:var(--text);" id="exp-counter">0
+                        / 8</span></div>
+                    <div style="height:3px;background:var(--border);border-radius:99px;overflow:hidden;">
+                      <div id="ep"
+                        style="width:0%;height:100%;background:var(--purple);border-radius:99px;transition:width 3.5s linear;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Send a hint mid-run..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s7">
+            <div class="row">
+              <div class="main pad">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-shrink:0;">
+                  <div class="repair-badge"><span class="spin">⟳</span> Auto-repair in progress</div>
+                </div>
+                <div class="terminal" id="terminal"></div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt on">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at" id="rp7-txt">Crash detected.<br>Auto-repairing...</div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s8">
+            <div class="row">
+              <div class="main pad">
+                <div class="lhdr">OctOpus experiment log — live stream</div>
+                <div class="ll" id="l1"><span class="lterr">[error]</span><span class="logt">Exp 1: CRASH → KeyError
+                    'radiation' <span class="logb">· auto-repairing...</span></span></div>
+                <div class="ll" id="l2"><span class="lta">[OctOpus]</span><span class="logt">🔄 Fixed pipeline ·
+                    retrying Exp 1...</span></div>
+                <div class="ll" id="l3"><span class="lte">[engine]</span><span class="logt">Exp 1: LSTM → rmse=<span
+                      class="loghi">118.4</span> ✓</span></div>
+                <div class="ll" id="l4"><span class="lta">[OctOpus]</span><span class="logt">✅ KEEP — LSTM: 118.4 <span
+                      class="loghi">NEW BEST</span></span></div>
+                <div class="ll" id="l5"><span class="lte">[engine]</span><span class="logt">Exp 2: xLSTM → rmse=<span
+                      class="loghi">104.2</span> · +12%</span></div>
+                <div class="ll" id="l6"><span class="lta">[OctOpus]</span><span class="logt">✅ KEEP — xLSTM: 104.2 <span
+                      class="loghi">NEW BEST</span></span></div>
+                <div class="ll" id="l7"><span class="lte">[engine]</span><span class="logt">Exp 3: Transformer →
+                    rmse=<span class="loghi">97.8</span></span></div>
+                <div class="ll" id="l8"><span class="lta">[OctOpus]</span><span class="logt">✅ KEEP — Transformer: 97.8
+                    <span class="loghi">NEW BEST</span></span></div>
+                <div class="ll" id="l9"><span class="lte">[engine]</span><span class="logt">Exp 5: CatBoost_Optuna400 →
+                    rmse=<span class="loghi">93.29</span> · BEST</span></div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt on">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at">Research complete!<br><span class="ok">✓</span> 8 models tested<br><span
+                        class="ok">✓</span> 1 auto-repaired<br><span class="ok">✓</span> Best: CatBoost 93.29</div>
+                  </div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s9">
+            <div class="row">
+              <div class="main pad">
+                <div style="font-size:10px;color:var(--text2);margin-bottom:7px;">Model comparison · 8 experiments ·
+                  accuracy ranking</div>
+                <div class="exp-row"><span class="exp-rk">1</span><span class="exp-n">CatBoost_Optuna400</span>
+                  <div class="exp-tr">
+                    <div class="exp-f" id="ef1" style="background:#7c6ff7;"></div>
+                  </div><span class="exp-v">0.9019</span>
+                </div>
+                <div class="exp-row"><span class="exp-rk">2</span><span class="exp-n">Transformer (d128,h8)</span>
+                  <div class="exp-tr">
+                    <div class="exp-f" id="ef2" style="background:#60a5fa;"></div>
+                  </div><span class="exp-v">0.8841</span>
+                </div>
+                <div class="exp-row"><span class="exp-rk">3</span><span class="exp-n">xLSTM_BlockStack</span>
+                  <div class="exp-tr">
+                    <div class="exp-f" id="ef3" style="background:#a89cf7;"></div>
+                  </div><span class="exp-v">0.8712</span>
+                </div>
+                <div class="exp-row"><span class="exp-rk">4</span><span class="exp-n">LSTM (3-layer)</span>
+                  <div class="exp-tr">
+                    <div class="exp-f" id="ef4" style="background:#34d399;"></div>
+                  </div><span class="exp-v">0.8554</span>
+                </div>
+                <div class="exp-row"><span class="exp-rk">5</span><span class="exp-n">XGBoost_Enhanced</span>
+                  <div class="exp-tr">
+                    <div class="exp-f" id="ef5" style="background:#22c55e;"></div>
+                  </div><span class="exp-v">0.8421</span>
+                </div>
+                <div style="margin-top:6px;">
+                  <div style="font-size:9px;color:var(--text3);margin-bottom:3px;">Training loss convergence (epochs)
+                  </div>
+                  <svg width="100%" height="50" viewBox="0 0 390 50" preserveAspectRatio="none">
+                    <line x1="0" y1="46" x2="390" y2="46" stroke="#252535" stroke-width="0.5" />
+                    <polyline fill="none" stroke="#34d399" stroke-width="1.2" opacity="0.9"
+                      points="0,4 25,5 50,8 80,13 110,18 145,22 180,26 215,29 250,31 285,33 320,35 355,36 390,37" />
+                    <polyline fill="none" stroke="#a89cf7" stroke-width="1.2" opacity="0.9"
+                      points="0,4 25,5 50,7 80,10 110,14 145,17 180,19 215,21 250,22 285,23 320,24 355,24 390,24" />
+                    <polyline fill="none" stroke="#60a5fa" stroke-width="1.2" opacity="0.9"
+                      points="0,4 25,4 50,6 80,8 110,11 145,13 180,14 215,15 250,16 285,16 320,17 355,17 390,17" />
+                    <text x="392" y="39" font-size="7" fill="#34d399">LSTM</text>
+                    <text x="392" y="26" font-size="7" fill="#a89cf7">xLSTM</text>
+                    <text x="392" y="19" font-size="7" fill="#60a5fa">Trans.</text>
+                  </svg>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt on">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Best Model</div>
+                  <div class="pc">
+                    <div class="pr"><span class="pk">MODEL</span><span class="pv">CatBoost</span></div>
+                    <div class="pr"><span class="pk">RMSE</span><span class="pv"
+                        style="color:var(--purple);">93.29</span></div>
+                    <div class="pr"><span class="pk">R²</span><span class="pv" style="color:var(--blue);">0.8908</span>
+                    </div>
+                    <div class="pr"><span class="pk">GRADE</span><span class="pv" style="color:var(--green);">B</span>
+                    </div>
+                  </div>
+                  <div class="exec-b">Deploy as API</div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s10">
+            <div class="row">
+              <div class="main pad">
+                <div class="report-wrap">
+                  <div class="report-hdr">
+                    <div class="report-title">Final Research Report</div>
+                    <div class="report-actions">
+                      <div class="ract copy">Copy</div>
+                      <div class="ract">Share</div>
+                    </div>
+                  </div>
+                  <div class="report-body">
+                    <div class="rh1">Revenue Forecast — Final Technical Report</div>
+                    <div class="rh2">Executive Summary</div>
+                    <div class="rp-txt">TimeSeriesForecasting on <span class="rhi">9,400-row</span> sales dataset
+                      (target: <span class="rcode">revenue ($)</span>), optimizing RMSE. <span class="rhi">8
+                        experiments</span> over iterative cycles. Winner: <span class="rhi">CatBoost with 400-trial
+                        Optuna HPO</span>, achieving <span style="color:var(--purple);font-weight:600;">RMSE 93.29 · R²
+                        0.8908</span> — Grade B. May forecast: <span style="color:var(--purple);font-weight:600;">$2.18M
+                        (+12.4%)</span>.</div>
+                    <div class="rh2">Experiment Breakdown</div>
+                    <table class="rsep">
+                      <tr>
+                        <td>Exp 1 — LSTM baseline</td>
+                        <td class="rp-txt">118.4</td>
+                        <td style="color:var(--text3);">repaired · kept</td>
+                      </tr>
+                      <tr>
+                        <td>Exp 2 — xLSTM</td>
+                        <td class="rp-txt">104.2</td>
+                        <td style="color:var(--green);">+12% ✓</td>
+                      </tr>
+                      <tr>
+                        <td>Exp 3 — Transformer</td>
+                        <td class="rp-txt">97.8</td>
+                        <td style="color:var(--green);">+6% ✓</td>
+                      </tr>
+                      <tr>
+                        <td>Exp 5 — CatBoost_Optuna400</td>
+                        <td class="rbest">93.29</td>
+                        <td style="color:var(--green);">BEST ★</td>
+                      </tr>
+                    </table>
+                    <div class="rh2">Production Readiness</div>
+                    <div class="rp-txt">Model deployed at <span class="rcode">api.octoopus.dev/v1/predict/x7f2</span> ·
+                      38ms avg latency · 95% CI ±$94K</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt">Chat</div>
+                  <div class="rpt on">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at"><span class="ok">✓</span> Report generated<br><span class="ok">✓</span> 4
+                      sections<br><span class="ok">✓</span> Experiment log<br><span class="ok">✓</span> Production notes
+                    </div>
+                  </div>
+                  <div
+                    style="background:#0d2818;border:1px solid #1a4028;border-radius:5px;padding:5px 8px;font-size:9px;color:var(--green);">
+                    ● Report ready · shareable link</div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s11">
+            <div class="row">
+              <div class="main pad">
+                <div style="font-size:10px;color:var(--text2);margin-bottom:6px;">Revenue forecast — next 30 days by
+                  product &amp; region</div>
+                <svg width="100%" height="110" viewBox="0 0 440 110" preserveAspectRatio="none"
+                  style="margin-bottom:6px;">
+                  <line x1="32" y1="8" x2="32" y2="88" stroke="#252535" stroke-width="0.5" />
+                  <line x1="32" y1="88" x2="435" y2="88" stroke="#252535" stroke-width="0.5" />
+                  <line x1="32" y1="28" x2="435" y2="28" stroke="#252535" stroke-width="0.5" stroke-dasharray="3,3" />
+                  <line x1="32" y1="52" x2="435" y2="52" stroke="#252535" stroke-width="0.5" stroke-dasharray="3,3" />
+                  <line x1="32" y1="72" x2="435" y2="72" stroke="#252535" stroke-width="0.5" stroke-dasharray="3,3" />
+                  <text x="28" y="11" text-anchor="end" font-size="7" fill="#404058">$2.4M</text>
+                  <text x="28" y="31" text-anchor="end" font-size="7" fill="#404058">$2.1M</text>
+                  <text x="28" y="55" text-anchor="end" font-size="7" fill="#404058">$1.8M</text>
+                  <text x="28" y="75" text-anchor="end" font-size="7" fill="#404058">$1.5M</text>
+                  <text x="85" y="100" text-anchor="middle" font-size="7" fill="#404058">Jan</text>
+                  <text x="150" y="100" text-anchor="middle" font-size="7" fill="#404058">Feb</text>
+                  <text x="215" y="100" text-anchor="middle" font-size="7" fill="#404058">Mar</text>
+                  <text x="278" y="100" text-anchor="middle" font-size="7" fill="#404058">Apr</text>
+                  <text x="360" y="100" text-anchor="middle" font-size="7" fill="#7c6ff7">May ↑</text>
+                  <polygon fill="#7c6ff7" opacity="0.12"
+                    points="278,48 305,42 330,35 355,30 380,25 405,20 425,16 425,34 405,38 380,43 355,47 330,52 305,57 278,62" />
+                  <polyline fill="none" stroke="#e2e2f0" stroke-width="1.5" opacity="0.7"
+                    points="38,68 70,64 100,58 130,65 160,54 190,48 220,55 245,44 270,50 278,48" />
+                  <polyline fill="none" stroke="#7c6ff7" stroke-width="2" stroke-dasharray="5,3"
+                    points="278,48 305,42 330,35 355,30 380,25 405,20 425,16" />
+                  <circle cx="305" cy="42" r="2.5" fill="#7c6ff7" />
+                  <circle cx="330" cy="35" r="2.5" fill="#7c6ff7" />
+                  <circle cx="355" cy="30" r="2.5" fill="#7c6ff7" />
+                  <circle cx="380" cy="25" r="2.5" fill="#7c6ff7" />
+                  <circle cx="405" cy="20" r="2.5" fill="#7c6ff7" />
+                  <circle cx="425" cy="16" r="2.5" fill="#7c6ff7" />
+                  <line x1="278" y1="8" x2="278" y2="88" stroke="#404058" stroke-width="0.8" stroke-dasharray="3,3" />
+                  <text x="280" y="14" font-size="7" fill="#404058">now</text>
+                  <line x1="36" y1="107" x2="52" y2="107" stroke="#e2e2f0" stroke-width="1.5" opacity="0.7" /><text
+                    x="54" y="110" font-size="7" fill="#8080a0">Actual</text>
+                  <line x1="86" y1="107" x2="102" y2="107" stroke="#7c6ff7" stroke-width="2" stroke-dasharray="4,2" />
+                  <text x="104" y="110" font-size="7" fill="#8080a0">Forecast</text>
+                  <rect x="136" y="103" width="12" height="6" fill="#7c6ff7" opacity="0.2" /><text x="150" y="110"
+                    font-size="7" fill="#8080a0">95% CI</text>
+                  <text x="210" y="110" font-size="7" fill="#7c6ff7" font-weight="600">+12.4% growth predicted</text>
+                </svg>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;">
+                  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;">
+                    <div style="font-size:8px;color:var(--text3);text-transform:uppercase;">May forecast</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--purple);margin-top:2px;">$2.18M</div>
+                    <div style="font-size:8px;color:var(--text3);">+12.4% vs Apr</div>
+                  </div>
+                  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;">
+                    <div style="font-size:8px;color:var(--text3);text-transform:uppercase;">RMSE</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--purple);margin-top:2px;">93.29</div>
+                    <div style="font-size:8px;color:var(--text3);">test set</div>
+                  </div>
+                  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;">
+                    <div style="font-size:8px;color:var(--text3);text-transform:uppercase;">R²</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--blue);margin-top:2px;">0.89</div>
+                    <div style="font-size:8px;color:var(--text3);">Grade B</div>
+                  </div>
+                  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;">
+                    <div style="font-size:8px;color:var(--text3);text-transform:uppercase;">95% CI</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--green);margin-top:2px;">±$94K</div>
+                    <div style="font-size:8px;color:var(--text3);">confidence</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt on">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at"><span class="ok">✓</span> Forecast ready<br><span class="ok">✓</span> Model
+                      deployed<br><span class="ok">✓</span> Report done</div>
+                  </div>
+                  <div
+                    style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 8px;font-size:9px;color:var(--text2);line-height:1.5;">
+                    May: <strong style="color:var(--purple);">$2.18M</strong> (+12.4%)<br>West: +18% · SaaS Pro top
+                  </div>
+                  <div
+                    style="background:#0d2818;border:1px solid #1a4028;border-radius:5px;padding:4px 8px;font-size:9px;color:var(--green);">
+                    ● Live · api.octoopus.dev</div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="s12">
+            <div class="row">
+              <div class="main pad">
+                <div class="dl-wrap">
+                  <div class="dl-hdr">
+                    <div>
+                      <div class="dl-title">Project Pack — download everything</div>
+                      <div class="dl-meta">All files · 18.4 MB · ready to share or deploy</div>
+                    </div>
+                    <div class="dl-btn-main" id="dl-btn">
+                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 2v7M4 7l3 3 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                        <path d="M2 11h10" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                      </svg>
+                      Download .zip
+                    </div>
+                  </div>
+                  <div class="file-tree" id="file-tree"></div>
+                </div>
+              </div>
+              <div class="rp">
+                <div class="rpt-row">
+                  <div class="rpt on">Chat</div>
+                  <div class="rpt">Plan</div>
+                  <div class="rpt">Agent</div>
+                </div>
+                <div class="rp-body">
+                  <div class="rl">Agent</div>
+                  <div class="ag">
+                    <div class="an">OctOpus</div>
+                    <div class="at"><span class="ok">✓</span> Model deployed<br><span class="ok">✓</span> Report
+                      generated<br><span class="ok">✓</span> Project pack ready<br><span class="ok">✓</span> API live
+                    </div>
+                  </div>
+                  <div
+                    style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 8px;font-size:9px;color:var(--text2);line-height:1.6;">
+                    <strong style="color:var(--text);">18 files</strong> packaged<br>model · code · report<br>deploy
+                    folder · charts
+                  </div>
+                  <div
+                    style="background:#0d2818;border:1px solid #1a4028;border-radius:5px;padding:4px 8px;font-size:9px;color:var(--green);">
+                    ● Live · api.octoopus.dev</div>
+                </div>
+                <div class="rp-inp-w"><input class="rp-inp" placeholder="Ask OctOpus..." readonly />
+                  <div class="send-b"><svg viewBox="0 0 10 10" fill="none">
+                      <path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="mouse" id="mouse"><svg viewBox="0 0 18 18" fill="none">
+            <path d="M2 2l5.5 13.5 2.5-5.5 5.5-2.5L2 2z" fill="white" stroke="#111" stroke-width="0.8" />
+          </svg>
+          <div class="cring" id="cring"></div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="ptrack">
+          <div class="pfill" id="pfill"></div>
+        </div>
+        <div class="sinfo"><span class="snum" id="snum">1/13</span>
+          <div class="sdots" id="sdots"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STEPS = [
+      { s: 's0', nav: true, at: false, tabs: false, tab: null, narr: 'Get started — desktop app or web version', nstep: 'octoopus.dev', badge: null, zoom: 1, mx: 50, my: 60, dur: 5500 },
+      { s: 's1', nav: false, at: false, tabs: false, tab: null, narr: 'Tell OctOpus your role', nstep: 'Onboarding', badge: null, zoom: 1, mx: 50, my: 52, dur: 5000 },
+      { s: 's2', nav: false, at: true, tabs: true, tab: 'tb-data', narr: 'Connect your data', nstep: 'Step 1', badge: { t: 'READY', bg: '#1a1830', c: '#a89cf7', bc: '#3d2fa0' }, zoom: 1, mx: 34, my: 50, dur: 4200 },
+      { s: 's3', nav: false, at: true, tabs: true, tab: 'tb-data', narr: 'Describe your goal in plain English', nstep: 'Step 2', badge: { t: 'READY', bg: '#1a1830', c: '#a89cf7', bc: '#3d2fa0' }, zoom: 1, mx: 52, my: 44, dur: 5000 },
+      { s: 's4', nav: false, at: true, tabs: true, tab: 'tb-data', narr: 'Review the plan — type go to start', nstep: 'Step 3', badge: { t: 'PLANNING', bg: '#2d1a0a', c: '#f59e0b', bc: '#4a2a00' }, zoom: 1, mx: 58, my: 68, dur: 4200 },
+      { s: 's5', nav: false, at: true, tabs: true, tab: 'tb-prog', narr: 'OctOpus writes the research blueprint live', nstep: 'Step 4', badge: { t: 'PLANNING', bg: '#2d1a0a', c: '#f59e0b', bc: '#4a2a00' }, zoom: 1, mx: 40, my: 50, dur: 7000 },
+      { s: 's6', nav: false, at: true, tabs: true, tab: 'tb-code', narr: 'OctOpus writes train.py — experiments start', nstep: 'Step 5', badge: { t: 'TRAINING', bg: '#0d1f3c', c: '#60a5fa', bc: '#1a3a6a' }, zoom: 1, mx: 34, my: 55, dur: 8000 },
+      { s: 's7', nav: false, at: true, tabs: true, tab: 'tb-logs', narr: 'Crash detected — OctOpus auto-repairs live', nstep: 'Step 6 · Auto-repair', badge: { t: 'REPAIRING', bg: '#1e1400', c: '#f59e0b', bc: '#3a2800' }, zoom: 1, mx: 44, my: 52, dur: 5500 },
+      { s: 's8', nav: false, at: true, tabs: true, tab: 'tb-logs', narr: 'Fixed — all experiments running', nstep: 'Step 6 · Running', badge: { t: 'TRAINING', bg: '#0d1f3c', c: '#60a5fa', bc: '#1a3a6a' }, zoom: 1, mx: 44, my: 55, dur: 5000 },
+      { s: 's9', nav: false, at: true, tabs: true, tab: 'tb-exp', narr: 'OctOpus picks the winner', nstep: 'Step 7', badge: { t: 'DONE', bg: '#0d2818', c: '#22c55e', bc: '#1a4028' }, zoom: 1, mx: 66, my: 58, dur: 4500 },
+      { s: 's10', nav: false, at: true, tabs: true, tab: 'tb-rep', narr: 'Final research report — auto-generated', nstep: 'Step 8 · Report', badge: { t: 'DONE', bg: '#0d2818', c: '#22c55e', bc: '#1a4028' }, zoom: 1, mx: 52, my: 50, dur: 5000 },
+      { s: 's11', nav: false, at: true, tabs: true, tab: 'tb-res', narr: 'Forecast answer — May revenue $2.18M (+12.4%)', nstep: 'Step 9 · Forecast', badge: { t: 'LIVE', bg: '#0d2818', c: '#22c55e', bc: '#1a4028' }, zoom: 1, mx: 72, my: 60, dur: 5000 },
+      { s: 's12', nav: false, at: true, tabs: true, tab: 'tb-res', narr: 'Download project pack — all 18 files', nstep: 'Step 10 · Download', badge: { t: 'LIVE', bg: '#0d2818', c: '#22c55e', bc: '#1a4028' }, zoom: 1, mx: 58, my: 30, dur: 5500 },
+    ];
+    const N = STEPS.length;
+    const sdEl = document.getElementById('sdots');
+    for (let i = 0; i < N; i++) { const d = document.createElement('div'); d.className = 'sd'; d.id = 'sd' + i; sdEl.appendChild(d); }
+
+    let cur = 0, pTimer = null, nTimer = null, pStart = 0, inited = {};
+    const mouseEl = document.getElementById('mouse'), cring = document.getElementById('cring');
+    function mm(x, y, cb) { mouseEl.style.opacity = '1'; mouseEl.style.left = x + '%'; mouseEl.style.top = y + '%'; if (cb) setTimeout(cb, 700); }
+    function clk(cb) { cring.style.transition = 'none'; cring.style.transform = 'scale(0)'; cring.style.opacity = '1'; setTimeout(() => { cring.style.transition = 'transform 0.4s ease,opacity 0.4s ease'; cring.style.transform = 'scale(1.8)'; cring.style.opacity = '0'; }, 30); if (cb) setTimeout(cb, 400); }
+    function narr(txt, step) { const ni = document.getElementById('ni'); ni.classList.remove('on'); setTimeout(() => { document.getElementById('nt').textContent = txt; document.getElementById('ns').textContent = step; ni.classList.add('on'); }, 150); }
+
+    function go(n) {
+      cur = n % N; const s = STEPS[cur];
+      document.querySelectorAll('.scene').forEach(el => el.classList.remove('on'));
+      document.getElementById(s.s).classList.add('on');
+      document.getElementById('nav').style.display = s.nav ? 'flex' : 'none';
+      document.getElementById('app-top').style.display = s.at ? 'flex' : 'none';
+      document.getElementById('app-tabs').style.display = s.tabs ? 'flex' : 'none';
+      if (s.tab) { document.querySelectorAll('.tab').forEach(el => el.classList.remove('on')); const t = document.getElementById(s.tab); if (t) t.classList.add('on'); }
+      document.querySelectorAll('.sd').forEach((d, i) => d.classList.toggle('on', i === cur));
+      document.getElementById('snum').textContent = `${cur + 1}/${N}`;
+      if (s.badge) { const b = s.badge, badge = document.getElementById('tbadge'); badge.textContent = b.t; badge.style.background = b.bg; badge.style.color = b.c; badge.style.borderColor = b.bc; }
+      document.getElementById('zwrap').style.transform = `scale(${s.zoom})`;
+      const pf = document.getElementById('pfill'); pf.style.transition = 'none'; pf.style.width = '0%';
+      if (pTimer) clearInterval(pTimer); pStart = Date.now();
+      pTimer = setInterval(() => { const p = Math.min(100, (Date.now() - pStart) / s.dur * 100); pf.style.width = p + '%'; if (p >= 100) clearInterval(pTimer); }, 40);
+      if (nTimer) clearTimeout(nTimer); nTimer = setTimeout(() => go(cur + 1), s.dur);
+      setTimeout(() => mm(s.mx, s.my), 400);
+      narr(s.narr, s.nstep);
+      if (!inited[cur]) {
+        inited[cur] = true;
+        if (cur === 0) i0(); if (cur === 1) i1(); if (cur === 2) i2(); if (cur === 3) i3();
+        if (cur === 4) i4(); if (cur === 5) i5(); if (cur === 6) i6(); if (cur === 7) i7();
+        if (cur === 8) i8(); if (cur === 9) i9(); if (cur === 12) i12();
+      }
+    }
+
+    function i0() {
+      const tags = ['tag-ds', 'tag-pro', 'tag-res']; let ti = 0;
+      const pulse = setInterval(() => { tags.forEach(id => document.getElementById(id).classList.remove('active')); document.getElementById(tags[ti % tags.length]).classList.add('active'); ti++; }, 1000);
+      setTimeout(() => clearInterval(pulse), 4500);
+      const mac = document.getElementById('cta-mac'), web = document.getElementById('cta-web'), ttm = document.getElementById('tt-mac'), ttw = document.getElementById('tt-web');
+      setTimeout(() => { mm(33, 68, () => { mac.classList.add('hov'); ttm.classList.add('on'); setTimeout(() => { mac.classList.remove('hov'); ttm.classList.remove('on'); mm(60, 68, () => { web.classList.add('hov'); ttw.classList.add('on'); }); }, 2000); }); }, 1500);
+    }
+    function i1() {
+      ['r1', 'r2', 'r3', 'r4', 'r5'].forEach(id => document.getElementById(id).classList.remove('sel'));
+      const seq = [{ id: 'r1', mx: 50, my: 36 }, { id: 'r2', mx: 50, my: 44 }, { id: 'r4', mx: 50, my: 58 }];
+      let i = 0; function nx() { if (i >= seq.length) return; const it = seq[i++]; setTimeout(() => mm(it.mx, it.my, () => clk(() => { ['r1', 'r2', 'r3', 'r4', 'r5'].forEach(id => document.getElementById(id).classList.remove('sel')); document.getElementById(it.id).classList.add('sel'); nx(); })), i === 1 ? 700 : 1400); } nx();
+      setTimeout(() => mm(50, 80, () => clk()), 3800);
+    }
+    function i2() {
+      const dz = document.getElementById('dz'), dzn = document.getElementById('dz-n'), dzm = document.getElementById('dz-m'), dzc = document.getElementById('dz-c'), rp = document.getElementById('rp2');
+      dz.classList.remove('drag'); dzn.textContent = 'Drop file or connect a source above'; dzm.textContent = 'CSV · XLSX · Parquet · JSON · up to 500MB'; dzc.style.opacity = '0'; rp.style.opacity = '0';
+      setTimeout(() => mm(34, 50, () => clk(() => { dz.classList.add('drag'); dzn.textContent = 'sales_data.csv'; dzm.textContent = '9,400 rows · 11 columns · 1.8 MB'; setTimeout(() => { dzc.style.opacity = '1'; rp.style.opacity = '1'; }, 400); })), 900);
+    }
+    function i3() {
+      const phrase = "Forecast next month's revenue by product and region.";
+      const bu = document.getElementById('bu3'), tt = document.getElementById('typed'), tc = document.getElementById('tcur'), ba = document.getElementById('ba3'), rp = document.getElementById('rp3');
+      bu.classList.remove('on'); ba.classList.remove('on'); rp.style.opacity = '0'; tt.textContent = ''; tc.style.opacity = '1';
+      setTimeout(() => { bu.classList.add('on'); let i = 0; function type() { if (i < phrase.length) { tt.textContent += phrase[i++]; setTimeout(type, 32); } else { tc.style.opacity = '0'; clk(() => { setTimeout(() => { ba.classList.add('on'); rp.style.opacity = '1'; }, 400); }); } } type(); }, 600);
+    }
+    function i4() { const inp = document.getElementById('go-inp'), rp = document.getElementById('go-rp'); setTimeout(() => mm(58, 65, () => { inp.classList.add('typed'); inp.textContent = 'go'; rp.value = 'go'; clk(); }), 2000); }
+    function i5() {
+      const el = document.getElementById('md-live'); el.innerHTML = '';
+      const lines = ['# program.md\n', '\n', '## 1. Mission\n', 'Predict `revenue ($)` · task: TimeSeriesForecasting\n', 'Metric: RMSE · lower is better · Goal < 80\n', '\n', '## 2. Model candidates\n', '- CatBoost  · LightGBM  · XGBoost\n', '- LSTM (3-layer)  · xLSTM BlockStack\n', '- Transformer (d_model=128, nhead=8)\n', '- ElasticNet  · HistGradientBoosting\n', '\n', '## 3. Constraints\n', '- Single file: all code in train.py\n', '- seed: np.random.seed(42)\n', '- Features: lag, rolling avg, Fourier, positional\n', '- Time budget per exp: 720s | hard kill: 900s\n'];
+      let txt = ''; lines.forEach((t, i) => setTimeout(() => { txt += t; el.textContent = txt + '▋'; }, i * 360));
+      setTimeout(() => { el.textContent = txt; document.getElementById('rp5-txt').innerHTML = '<span style="color:var(--green)">✓</span> program.md ready<br>⟳ Writing train.py...'; document.getElementById('rp5-plan').style.opacity = '1'; }, (lines.length) * 360 + 200);
+    }
+    function i6() {
+      const el = document.getElementById('py-live'); el.innerHTML = '';
+      const lines = ['import torch, pandas as pd, numpy as np\n', 'from catboost import CatBoostRegressor\n', 'from xlstm import xLSTMBlockStack\n', '\n', 'class TransformerModel(nn.Module):\n', '    def __init__(self):\n', '        self.encoder = nn.TransformerEncoder(\n', '            d_model=128, nhead=8, num_layers=4)\n', '        self.lstm = nn.LSTM(\n', '            input_size=128, hidden_size=256, num_layers=3)\n', '\n', 'def make_features(df):\n', '    df["lag_7"]   = df["revenue"].shift(7)\n', '    df["lag_30"]  = df["revenue"].shift(30)\n', '    df["roll_14"] = df["revenue"].rolling(14).mean()\n', '    df["fsin"]    = np.sin(2*np.pi*df["doy"]/365)\n', '    return df\n', '\n', '# Train all 8 models and compare...\n'];
+      let txt = ''; lines.forEach((t, i) => setTimeout(() => { txt += t; el.textContent = txt + '▋'; }, i * 300));
+      setTimeout(() => { el.textContent = txt; document.getElementById('rp6-txt').innerHTML = '<span style="color:var(--green)">✓</span> train.py written<br>⟳ Experiments running...'; const ep = document.getElementById('ep'), counter = document.getElementById('exp-counter'); ep.style.width = '0%'; let c = 0; const tick = setInterval(() => { c++; counter.textContent = c + ' / 8'; ep.style.width = (c / 8 * 100) + '%'; if (c >= 8) clearInterval(tick); }, 500); }, (lines.length) * 300 + 300);
+    }
+    function i7() {
+      const term = document.getElementById('terminal'); term.innerHTML = '';
+      const lines = [
+        { cls: 't-err', tag: '[error]', txt: 'Traceback (most recent call last):', d: 0 },
+        { cls: 't-err', tag: '', txt: '  ModuleNotFoundError: No module named xlstm', d: 400 },
+        { cls: 't-err', tag: '', txt: '  KeyError: radiation (W/m2) — data leakage detected', d: 700 },
+        { cls: 't-warn', tag: '[OctOpus]', txt: 'Crash on Exp 1 — initiating auto-repair...', d: 1100 },
+        { cls: 't-cmd', tag: '[repair]', txt: 'pip install xlstm==0.1.6 --quiet', d: 1600 },
+        { cls: 't-sys', tag: '[sys]', txt: 'Collecting xlstm==0.1.6...', d: 2200 },
+        { cls: 't-sys', tag: '[sys]', txt: 'Downloading xlstm-0.1.6-py3-none-any.whl (42 kB)', d: 2700 },
+        { cls: 't-ok', tag: '[sys]', txt: 'Successfully installed xlstm-0.1.6 ✓', d: 3200 },
+        { cls: 't-warn', tag: '[repair]', txt: 'Patching pipeline — removing target leakage...', d: 3700 },
+        { cls: 't-ok', tag: '[repair]', txt: 'Patch applied: radiation excluded from test features ✓', d: 4200 },
+        { cls: 't-ok', tag: '[OctOpus]', txt: 'Auto-repair complete — retrying Exp 1 now...', d: 4700 },
+      ];
+      lines.forEach(({ cls, tag, txt, d }) => {
+        setTimeout(() => {
+          const row = document.createElement('div'); row.className = 't-line';
+          if (tag) { const s = document.createElement('span'); s.className = cls; s.style.flexShrink = '0'; s.textContent = tag; row.appendChild(s); }
+          const t = document.createElement('span'); t.className = 't-txt'; t.textContent = txt; row.appendChild(t);
+          term.appendChild(row);
+          setTimeout(() => row.classList.add('on'), 10);
+          term.scrollTop = term.scrollHeight;
+        }, d);
+      });
+    }
+    function i8() {
+      const lines = ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8', 'l9'];
+      lines.forEach((id, i) => { const el = document.getElementById(id); el.classList.remove('on'); setTimeout(() => el.classList.add('on'), i * 450); });
+    }
+    function i9() {
+      const bars = ['ef1', 'ef2', 'ef3', 'ef4', 'ef5'], vals = ['90.1%', '88.4%', '87.1%', '85.5%', '84.2%'];
+      bars.forEach((id, i) => { const el = document.getElementById(id); el.style.width = '0%'; setTimeout(() => el.style.width = vals[i], 600 + (i * 150)); });
+    }
+    function i12() {
+      const tree = document.getElementById('file-tree'); tree.innerHTML = '';
+      const files = [
+        { n: 'project_pack.zip', s: '18.4 MB', t: 'folder', new: true },
+        { n: 'train.py', s: '12 KB', t: 'py' },
+        { n: 'program.md', s: '4 KB', t: 'md' },
+        { n: 'best_model.pkl', s: '14.2 MB', t: 'pkl', new: true },
+        { n: 'research_report.pdf', s: '1.1 MB', t: 'pdf' },
+        { n: 'predictions.csv', s: '840 KB', t: 'csv' },
+        { n: 'requirements.txt', s: '1 KB', t: 'txt' },
+        { n: 'api_deploy.json', s: '2 KB', t: 'json' }
+      ];
+      files.forEach((f, i) => {
+        setTimeout(() => {
+          const r = document.createElement('div'); r.className = 'ft-row';
+          const ico = document.createElement('div'); ico.className = 'ft-ico ' + (f.t === 'pdf' ? 'md' : f.t); ico.textContent = f.t.toUpperCase().slice(0, 3);
+          const name = document.createElement('span'); name.className = 'ft-name'; name.textContent = f.n;
+          const size = document.createElement('span'); size.className = 'ft-size'; size.textContent = f.s;
+          r.appendChild(ico); r.appendChild(name);
+          if (f.new) { const nb = document.createElement('span'); nb.className = 'ft-new'; nb.textContent = 'NEW'; r.appendChild(nb); }
+          r.appendChild(size); tree.appendChild(r);
+          setTimeout(() => r.classList.add('on'), 10);
+        }, i * 250);
+      });
+      const btn = document.getElementById('dl-btn'); btn.classList.remove('hl');
+      setTimeout(() => mm(75, 30, () => clk(() => btn.classList.add('hl'))), 3500);
+    }
+
+    // Pixel Logo Logic
+    (function () {
+      const P = [
+        0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+        0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        0, 0, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 0, 0,
+        0, 0, 1, 1, 3, 2, 1, 1, 1, 1, 3, 2, 1, 1, 0, 0,
+        0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+        0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0,
+        1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1,
+        1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1,
+        1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      ];
+      const COLORS = { 1: '#7c6ff7', 2: '#ffffff', 3: '#1a0e60' };
+      const shadow = P.map((v, i) => {
+        if (!v) return null;
+        const x = i % 16, y = Math.floor(i / 16);
+        return `${x}px ${y}px 0 ${COLORS[v]}`;
+      }).filter(x => x).join(',');
+
+      const ids = [];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.boxShadow = shadow;
+      });
+    })();
+
+    const params = new URLSearchParams(window.location.search);
+    const previewMode = params.get('mode') === 'preview';
+
+    function initPreview() {
+      document.body.classList.add('preview-mode');
+      document.querySelectorAll('.scene').forEach(el => el.classList.remove('on'));
+      document.getElementById('s1').classList.add('on');
+      document.getElementById('nt').textContent = 'Tell OctOpus your role';
+      document.getElementById('ns').textContent = 'Onboarding';
+      document.getElementById('ni').classList.add('on');
+      document.getElementById('mouse').style.opacity = '0';
+    }
+
+    if (previewMode) {
+      initPreview();
+    } else {
+      document.body.classList.remove('preview-mode');
+      go(0);
+    }
+  </script>
+</body>
+
+</html>
