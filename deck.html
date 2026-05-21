@@ -30,9 +30,10 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--mono);
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+    height: 100vh;
+    overflow: hidden;
   }
+  body { margin: 0; position: relative; }
 
   body::before {
     content: "";
@@ -100,22 +101,106 @@
   }
   .nav-right a:hover { color: var(--purple); }
 
+  /* ============ DECK ARROWS (keyboard nav indicators) ============ */
+  .deck-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 90;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(10, 10, 22, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s, background 0.2s, border-color 0.2s, transform 0.2s;
+    opacity: 0.55;
+    padding: 0;
+    user-select: none;
+  }
+  .deck-arrow span { display: inline-block; transform: translateY(-2px); }
+  .deck-arrow:hover, .deck-arrow:focus-visible {
+    opacity: 1;
+    background: rgba(124, 111, 247, 0.18);
+    border-color: var(--purple);
+    color: var(--purple);
+    outline: none;
+  }
+  .deck-arrow:hover { transform: translateY(-50%) scale(1.06); }
+  .deck-arrow:focus-visible {
+    box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--purple);
+  }
+  .deck-arrow[disabled],
+  .deck-arrow[aria-disabled="true"] {
+    opacity: 0.18;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .deck-arrow-prev { left: 22px; }
+  .deck-arrow-next { right: 22px; }
+
+  /* Small hint label under each arrow on first slide */
+  .deck-arrow::after {
+    content: attr(data-hint);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .deck-arrow:hover::after { opacity: 1; }
+
   /* ============ SLIDE STRUCTURE ============ */
+  /* 1280px-wide design canvas. Height is per-slide (auto, min 720) so dense
+     slides like the matrix get the height they need. JS measures each slide
+     and computes its own scale so EVERY slide fits its viewport without clipping. */
   .slide {
-    min-height: 100vh;
-    padding: 120px 64px 80px;
-    position: relative;
+    position: absolute;
+    top: 0; left: 0;
+    width: 1280px;
+    min-height: 720px;
+    height: auto;
+    padding: 88px 56px 56px;
     z-index: 3;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    border-bottom: 1px solid var(--ink-faint);
+    justify-content: safe center;
+    border: none;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
     overflow: hidden;
+    transform-origin: top left;
+    transform: translate(var(--slide-tx, 0px), var(--slide-ty, 0px)) scale(var(--slide-scale, 1));
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    z-index: 5;
   }
   .slide-num {
     position: absolute;
-    top: 90px;
-    left: 64px;
+    top: 56px;
+    left: 56px;
     font-family: var(--mono);
     font-size: 11px;
     color: var(--ink-faint);
@@ -123,8 +208,8 @@
   }
   .slide-tag {
     position: absolute;
-    top: 90px;
-    right: 64px;
+    top: 56px;
+    right: 56px;
     font-family: var(--mono);
     font-size: 11px;
     color: var(--purple);
@@ -146,10 +231,6 @@
     color: var(--purple);
     margin-bottom: 24px;
   }
-  .enhanced .eyebrow {
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -166,14 +247,11 @@
     min-height: 100vh;
   }
   .hero-title {
-    font-size: clamp(64px, 9vw, 140px);
+    font-size: clamp(44px, 5.4vw, 92px);
     font-weight: 300;
-    line-height: 0.92;
-    margin-bottom: 32px;
-  }
-  .enhanced .hero-title {
-    opacity: 0;
-    animation: fadeUp 1s 0.3s forwards;
+    line-height: 0.98;
+    margin-bottom: 28px;
+    max-width: 14ch;
   }
   .hero-title em {
     font-style: italic;
@@ -188,10 +266,6 @@
     max-width: 540px;
     margin-bottom: 48px;
   }
-  .enhanced .hero-sub {
-    opacity: 0;
-    animation: fadeUp 1s 0.6s forwards;
-  }
   .hero-meta {
     display: flex;
     gap: 48px;
@@ -200,10 +274,6 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--ink-dim);
-  }
-  .enhanced .hero-meta {
-    opacity: 0;
-    animation: fadeUp 1s 0.9s forwards;
   }
   .hero-meta strong { color: var(--ink); display: block; margin-top: 4px; font-size: 14px; }
 
@@ -214,10 +284,6 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-  }
-  .enhanced .mascot-wrap {
-    opacity: 0;
-    animation: fadeUp 1.4s 0.5s forwards;
   }
   .mascot {
     position: relative;
@@ -350,11 +416,11 @@
   }
   .big-quote {
     font-family: var(--serif);
-    font-size: clamp(40px, 4.8vw, 68px);
+    font-size: clamp(32px, 3.6vw, 54px);
     font-weight: 300;
-    line-height: 1.1;
+    line-height: 1.08;
     letter-spacing: -0.02em;
-    max-width: 760px;
+    max-width: 720px;
   }
   .big-quote em { color: var(--purple); font-style: italic; }
   .problem-lede {
@@ -736,30 +802,30 @@
   /* ============ SLIDE 6: WHY NOW / COMPETITION ============ */
   .matrix {
     display: grid;
-    grid-template-columns: 200px repeat(3, 1fr) 1fr;
+    grid-template-columns: 170px repeat(3, 1fr) 1.1fr;
     gap: 1px;
     background: var(--ink-faint);
     border: 1px solid var(--ink-faint);
-    margin-top: 48px;
+    margin-top: 32px;
     border-radius: 18px;
     overflow: hidden;
   }
   .matrix-cell {
     background: var(--bg);
-    padding: 24px 20px;
+    padding: 16px 16px;
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 12px;
     color: var(--ink-dim);
-    line-height: 1.65;
+    line-height: 1.55;
   }
   .matrix-cell.header {
     background: var(--bg-2);
     color: var(--ink);
-    font-size: 12px;
-    letter-spacing: 0.1em;
+    font-size: 11px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 500;
-    min-height: 104px;
+    min-height: 84px;
   }
   .matrix-cell.row-label {
     background: var(--bg-2);
@@ -775,13 +841,13 @@
   }
   .matrix-sub {
     display: block;
-    margin-top: 10px;
+    margin-top: 6px;
     color: var(--ink-dim);
     font-weight: 400;
-    font-size: 13px;
-    letter-spacing: 0.04em;
+    font-size: 11px;
+    letter-spacing: 0.03em;
     text-transform: none;
-    line-height: 1.5;
+    line-height: 1.4;
   }
   .matrix-strong {
     color: var(--ink);
@@ -1058,75 +1124,45 @@
   }
   .footer-info span { color: var(--purple); }
 
-  /* ============ REVEAL ON SCROLL ============ */
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-  .enhanced .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s, transform 1s;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* Reveal-on-scroll disabled — content shows immediately for stability */
+  .reveal { opacity: 1; transform: none; }
 
   /* ============ RESPONSIVE ============ */
 
-  /* Large desktops & laptops (≤1400px): tighten padding, scale matrix */
-  @media (max-width: 1400px) {
-    .slide { padding: 110px 48px 72px; }
-    .slide-num { left: 48px; }
-    .slide-tag { right: 48px; }
-    .hero { gap: 56px; }
-    .problem, .loop-wrap, .traction, .founder { gap: 56px; }
-    .matrix { grid-template-columns: 180px repeat(3, 1fr) 1.2fr; }
-  }
-
-  /* Small laptops & large tablets (≤1200px): collapse nav to fewer items, reduce mascot */
-  @media (max-width: 1200px) {
-    .slide { padding: 100px 40px 64px; }
-    .slide-num { left: 40px; }
-    .slide-tag { right: 40px; }
-    .nav { padding: 14px 24px; font-size: 11px; }
-    .nav-right { gap: 16px; }
-    .mascot { width: 280px; height: 280px; }
-    .hero { gap: 40px; }
-    .hero-meta { gap: 32px; }
-    .traction { gap: 48px; }
-    .tiers { gap: 16px; }
-    .tier { padding: 24px; }
-    .matrix-cell { padding: 18px 14px; font-size: 12px; }
-    .matrix-cell.header { font-size: 11px; min-height: 92px; }
-    .matrix-sub { font-size: 12px; }
-  }
-
-  /* Tablets (≤1024px): drop secondary nav links, stack the founder layout */
-  @media (max-width: 1024px) {
-    .nav-right a:nth-child(n+5) { display: none; }
-    .hero { grid-template-columns: 1fr 1fr; }
-    .hero-title { font-size: clamp(48px, 7.5vw, 96px); }
-    .problem { grid-template-columns: 1fr; gap: 40px; }
-    .founder { grid-template-columns: 1fr; gap: 48px; }
-    .founder-side { margin-top: 0; }
-    .traction { grid-template-columns: 1fr; gap: 48px; }
-    .loop-wrap { grid-template-columns: 1fr; gap: 48px; }
-    .loop-svg { max-width: 420px; margin: 0 auto; }
-    .ask-title { font-size: clamp(48px, 7vw, 96px); }
-  }
+  /* Intermediate breakpoints removed — the 1280×720 canvas + transform:scale
+     handles every viewport from ≤900px (mobile) up to 4K uniformly. */
 
   /* Tablets portrait & large phones (≤900px): single column everywhere, hide decorative bits */
   @media (max-width: 900px) {
-    .slide {
-      padding: 96px 24px 56px;
-      min-height: auto;
+    /* Mobile reverts to vertical scrolling — keyboard nav doesn't work on phones */
+    html, body {
+      height: auto;
+      overflow: visible;
     }
+    body { overflow-y: auto; }
+    .slide {
+      position: relative;
+      top: auto; left: auto;
+      width: 100%;
+      height: auto;
+      min-height: 100vh;
+      max-height: none;
+      padding: 96px 24px 56px;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      visibility: visible !important;
+      transition: none;
+      overflow: visible;
+      transform: none !important;
+      border-bottom: 1px solid var(--ink-faint);
+    }
+    .slide-num { top: 76px; left: 24px; }
+    .slide-tag { top: 76px; right: 24px; }
     .slide-num { top: 76px; left: 24px; }
     .slide-tag { top: 76px; right: 24px; }
     .nav { padding: 12px 18px; font-size: 10px; }
     .nav-right { display: none; }
+    .deck-arrow { display: none !important; }
     .hero, .problem, .loop-wrap, .traction, .founder {
       grid-template-columns: 1fr;
       gap: 48px;
@@ -1281,116 +1317,6 @@
     .orbit, .chip, .mascot-glow, .typing-bubble { animation: none !important; }
   }
 
-  /* ============ PRINT / PDF EXPORT ============
-     Targets letter & A4 landscape at common deck dimensions.
-     Tell browsers to: keep slide colors, one slide per page,
-     drop nav/animations, swap the iframe for a printable link card. */
-  @page {
-    size: 1280px 800px;
-    margin: 0;
-  }
-  @media print {
-    html, body {
-      background: #05050a !important;
-      color: #f4f1e8 !important;
-      overflow: visible !important;
-      scroll-behavior: auto !important;
-    }
-    * {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
-      animation: none !important;
-      transition: none !important;
-    }
-    body::before, body::after { display: none !important; }
-
-    .nav { display: none !important; }
-
-    .slide {
-      page-break-after: always;
-      break-after: page;
-      page-break-inside: avoid;
-      break-inside: avoid;
-      min-height: 800px;
-      height: 800px;
-      padding: 80px 56px 56px;
-      border-bottom: none;
-      overflow: hidden;
-    }
-    .slide:last-of-type {
-      page-break-after: auto;
-      break-after: auto;
-    }
-    .slide-num, .slide-tag { top: 48px; }
-    .slide-num { left: 56px; }
-    .slide-tag { right: 56px; }
-
-    /* Force the reveal-on-scroll items to be visible in PDF */
-    .reveal,
-    .enhanced .reveal,
-    .enhanced .hero-title,
-    .enhanced .hero-sub,
-    .enhanced .hero-meta,
-    .enhanced .mascot-wrap,
-    .enhanced .eyebrow {
-      opacity: 1 !important;
-      transform: none !important;
-      animation: none !important;
-    }
-
-    /* Static, predictable hero on print */
-    .hero { min-height: auto; gap: 48px; }
-    .typing-bubble, .orbit, .mascot-glow { display: none !important; }
-    .sticker { display: none !important; }
-
-    /* Cap big quote sizes so they always fit a page */
-    .hero-title { font-size: 88px !important; }
-    .big-quote { font-size: 48px !important; }
-    .ask-title { font-size: 72px !important; }
-    .founder-quote { font-size: 36px !important; }
-
-    /* The iframe will not render in print/PDF — replace it with a link card */
-    .demo-frame { display: none !important; }
-    .demo-link-row {
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 8px;
-    }
-    .demo-link {
-      border: 1px solid #7C6FF7 !important;
-      color: #7C6FF7 !important;
-      background: rgba(124,111,247,0.08) !important;
-      padding: 14px 22px;
-      font-size: 14px;
-    }
-    .demo-link[href]::after {
-      content: " — " attr(href);
-      color: #8a8aa0;
-      font-size: 11px;
-      letter-spacing: 0.05em;
-    }
-
-    /* Hyperlinks: expose the URL on the printed page */
-    a[href^="http"]::after {
-      content: " (" attr(href) ")";
-      font-size: 0.85em;
-      color: #8a8aa0;
-      letter-spacing: 0.02em;
-    }
-    .ask-cta::after { content: "" !important; }
-    .nav-right a::after { content: "" !important; }
-
-    /* Keep the bars visible without the rise animation */
-    .bar {
-      transform: scaleY(1) !important;
-      animation: none !important;
-    }
-
-    /* Matrix should stay one piece on a page */
-    .matrix { page-break-inside: avoid; break-inside: avoid; }
-    .tier, .stat-block, .traction-cell, .founder-card { break-inside: avoid; }
-  }
 </style>
 </head>
 <body class="no-js">
@@ -1402,17 +1328,25 @@
     <span>OCTOPUS / INVESTOR DECK · 2026</span>
   </div>
   <div class="nav-right">
-    <a onclick="scrollTo('s1')">01 · Hero</a>
-    <a onclick="scrollTo('s2')">02 · Problem</a>
-    <a onclick="scrollTo('s3')">03 · Product</a>
-    <a onclick="scrollTo('s4')">04 · Demo</a>
-    <a onclick="scrollTo('s5')">05 · Traction</a>
-    <a onclick="scrollTo('s6')">06 · Moat</a>
-    <a onclick="scrollTo('s7')">07 · Model</a>
-    <a onclick="scrollTo('s8')">08 · Founder</a>
-    <a onclick="scrollTo('s9')">09 · Ask</a>
+    <a onclick="goToSlide('s1')">01 · Hero</a>
+    <a onclick="goToSlide('s2')">02 · Problem</a>
+    <a onclick="goToSlide('s3')">03 · Product</a>
+    <a onclick="goToSlide('s4')">04 · Demo</a>
+    <a onclick="goToSlide('s5')">05 · Traction</a>
+    <a onclick="goToSlide('s6')">06 · Moat</a>
+    <a onclick="goToSlide('s7')">07 · Model</a>
+    <a onclick="goToSlide('s8')">08 · Founder</a>
+    <a onclick="goToSlide('s9')">09 · Ask</a>
   </div>
 </nav>
+
+<!-- ============ KEYBOARD NAV ARROWS ============ -->
+<button class="deck-arrow deck-arrow-prev" type="button" aria-label="Previous slide" data-hint="← prev">
+  <span aria-hidden="true">‹</span>
+</button>
+<button class="deck-arrow deck-arrow-next" type="button" aria-label="Next slide" data-hint="next →">
+  <span aria-hidden="true">›</span>
+</button>
 
 <!-- mascot loaded as image from /mnt/user-data/outputs/octopus-mascot.webp -->
 
@@ -1764,10 +1698,10 @@
   <div class="slide-tag">MOAT</div>
   <img class="sticker" src="sticker-cool.png" alt="" style="bottom:5%;right:4%;width:160px;--rot:8deg" />
   <div class="eyebrow reveal">Why now · why us</div>
-  <h2 class="reveal" style="font-size:clamp(36px,5vw,64px);font-weight:300;max-width:1100px">
+  <h2 class="reveal" style="font-size:clamp(30px,3.6vw,48px);font-weight:300;max-width:1100px;line-height:1.1">
     Writing code is easy. <em style="color:var(--purple);font-style:italic">Specialized knowledge and reasoning</em> are the moat.
   </h2>
-  <p class="reveal" style="font-family:var(--mono);font-size:13px;color:var(--ink-dim);line-height:1.7;max-width:720px;margin-top:24px">
+  <p class="reveal" style="font-family:var(--mono);font-size:12px;color:var(--ink-dim);line-height:1.6;max-width:720px;margin-top:16px">
     Claude, Codex, and Cursor can all write code. The hard part is knowing what to test, what to fix, what to trust, and what to ship for a specific forecasting problem. OctOpus compounds domain knowledge and reasoning on every run.
   </p>
 
@@ -1948,29 +1882,107 @@
 
 <script>
   document.body.classList.remove('no-js');
-  document.body.classList.add('enhanced');
 
-  // smooth scroll
-  function scrollTo(id) {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-  }
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const arrowPrev = document.querySelector('.deck-arrow-prev');
+  const arrowNext = document.querySelector('.deck-arrow-next');
+  const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+  let current = 0;
 
-  // reveal on scroll
-  const revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        }
+  // Canvas: 1280px wide, per-slide auto height.
+  // Each slide gets its OWN scale + translate so every slide fits its viewport.
+  const CANVAS_W = 1280;
+
+  function fitDeck() {
+    if (isMobile()) {
+      slides.forEach(s => {
+        s.style.removeProperty('--slide-scale');
+        s.style.removeProperty('--slide-tx');
+        s.style.removeProperty('--slide-ty');
       });
-    }, { threshold: 0.12 });
-
-    revealEls.forEach(el => observer.observe(el));
-  } else {
-    document.body.classList.remove('enhanced');
-    revealEls.forEach(el => el.classList.add('visible'));
+      return;
+    }
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    slides.forEach(slide => {
+      // offsetHeight is unaffected by transform — gives us the layout height
+      const slideH = slide.offsetHeight || 720;
+      const scale = Math.min(W / CANVAS_W, H / slideH);
+      const tx = Math.max(0, (W - CANVAS_W * scale) / 2);
+      const ty = Math.max(0, (H - slideH * scale) / 2);
+      slide.style.setProperty('--slide-scale', scale);
+      slide.style.setProperty('--slide-tx', tx + 'px');
+      slide.style.setProperty('--slide-ty', ty + 'px');
+    });
   }
+
+  fitDeck();
+  window.addEventListener('resize', fitDeck);
+  window.addEventListener('load', fitDeck);
+  // Refit once webfonts have loaded (text metrics can change slide height)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitDeck);
+  }
+
+  function updateArrows() {
+    if (!arrowPrev || !arrowNext) return;
+    arrowPrev.setAttribute('aria-disabled', current === 0 ? 'true' : 'false');
+    arrowNext.setAttribute('aria-disabled', current === slides.length - 1 ? 'true' : 'false');
+  }
+
+  function show(idx) {
+    current = Math.max(0, Math.min(slides.length - 1, idx));
+    if (isMobile()) {
+      slides[current].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      updateArrows();
+      return;
+    }
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    updateArrows();
+  }
+
+  function goToSlide(id) {
+    const idx = slides.findIndex(s => s.id === id);
+    if (idx >= 0) show(idx);
+  }
+  window.goToSlide = goToSlide;
+
+  if (arrowPrev) arrowPrev.addEventListener('click', () => show(current - 1));
+  if (arrowNext) arrowNext.addEventListener('click', () => show(current + 1));
+
+  // Initial render: show first slide immediately, no animation
+  show(0);
+
+  // Re-sync if user resizes between mobile/desktop modes
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    } else {
+      slides.forEach(s => s.classList.remove('active'));
+    }
+  });
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case 'PageDown':
+        e.preventDefault(); show(current + 1); break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault(); show(current - 1); break;
+      case ' ':
+        e.preventDefault(); show(current + (e.shiftKey ? -1 : 1)); break;
+      case 'Home':
+        e.preventDefault(); show(0); break;
+      case 'End':
+        e.preventDefault(); show(slides.length - 1); break;
+    }
+  });
 
   const localImages = document.querySelectorAll('img[src$=".webp"], img[src$=".png"]');
   localImages.forEach((img) => {
