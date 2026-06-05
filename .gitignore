@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+Thumbs.db
+
+# Oversized print PDF (exceeds GitHub's 100MB per-file limit)
+octopus-investor-deck-print.pdf
