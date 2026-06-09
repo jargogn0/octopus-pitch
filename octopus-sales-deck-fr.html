@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OctOpus — Présentation Commerciale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fraunces:opsz,wght,SOFT@9..144,300;9..144,400;9..144,600;9..144,800;9..144,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05050a;
+    --bg-2: #0a0a16;
+    --ink: #f4f1e8;
+    --ink-dim: #8a8aa0;
+    --ink-faint: #3a3a52;
+    --purple: #7C6FF7;
+    --purple-dim: #5a4fc4;
+    --purple-glow: rgba(124,111,247,0.35);
+    --acid: #c8f560;
+    --amber: #ffb84d;
+    --grid: rgba(124,111,247,0.06);
+    --serif: 'Fraunces', 'Times New Roman', serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 1;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(255,255,255,0.012) 2px,
+      rgba(255,255,255,0.012) 3px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ============ NAVIGATION ============ */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: rgba(5,5,10,0.6);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--ink-faint);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-left { display: flex; align-items: center; gap: 12px; }
+  .nav-dot {
+    width: 8px; height: 8px;
+    background: var(--acid);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--acid);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .nav-right { display: flex; gap: 24px; color: var(--ink-dim); }
+  .nav-right a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .nav-right a:hover { color: var(--purple); }
+
+  /* ============ SLIDE STRUCTURE ============ */
+  .slide {
+    min-height: 100vh;
+    padding: 96px 64px 52px;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--ink-faint);
+    overflow: hidden;
+  }
+  .slide-num {
+    position: absolute;
+    top: 90px;
+    left: 64px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+  }
+  .slide-tag {
+    position: absolute;
+    top: 90px;
+    right: 64px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--purple);
+    letter-spacing: 0.2em;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 24px;
+  }
+  .enhanced .eyebrow {
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ SLIDE 1: HERO ============ */
+  .hero {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 72px;
+    align-items: center;
+    min-height: auto;
+  }
+  .hero-title {
+    font-size: clamp(23px, 2.8vw, 40px);
+    font-weight: 300;
+    line-height: 1.14;
+    margin-bottom: 18px;
+  }
+  .enhanced .hero-title {
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--purple);
+    font-weight: 400;
+  }
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    max-width: 540px;
+    margin-bottom: 48px;
+  }
+  .enhanced .hero-sub {
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 48px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .enhanced .hero-meta {
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+  .hero-meta strong { color: var(--ink); display: block; margin-top: 4px; font-size: 14px; }
+
+  /* ============ TRUSTED-BY PARTNER LOGOS ============ */
+  .trusted {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 36px;
+    padding: 0 64px;
+    width: 100%;
+    text-align: center;
+  }
+  .enhanced .trusted {
+    opacity: 0;
+    animation: fadeUp 1s 1.1s forwards;
+  }
+  .trusted-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 24px;
+  }
+  .trusted-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 22px 44px;
+  }
+  .trusted-logos img {
+    height: 28px;
+    width: auto;
+    max-width: 132px;
+    object-fit: contain;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .trusted-logos img:hover { opacity: 1; }
+  @media (max-width: 900px) {
+    .trusted { margin-top: 48px; }
+    .trusted-logos { gap: 18px 32px; }
+    .trusted-logos img { height: 24px; max-width: 112px; }
+  }
+  @media (max-width: 640px) {
+    .trusted { margin-top: 40px; }
+    .trusted-label { letter-spacing: 0.25em; margin-bottom: 18px; }
+    .trusted-logos { gap: 16px 24px; }
+    .trusted-logos img { height: 20px; max-width: 92px; opacity: 0.72; }
+  }
+
+  /* ============ PIXEL OCTOPUS MASCOT ============ */
+  .mascot-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .enhanced .mascot-wrap {
+    opacity: 0;
+    animation: fadeUp 1.4s 0.5s forwards;
+  }
+  .mascot {
+    position: relative;
+    width: 320px;
+    height: 320px;
+  }
+  .mascot svg, .mascot img {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    object-fit: contain;
+  }
+
+  /* typing indicator bubble floating near the mascot */
+  .typing-bubble {
+    position: absolute;
+    top: 8%;
+    right: -30px;
+    background: var(--bg-2);
+    border: 1px solid var(--purple-dim);
+    padding: 10px 14px;
+    border-radius: 14px;
+    border-bottom-left-radius: 2px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    box-shadow: 0 0 24px var(--purple-glow);
+    z-index: 5;
+    animation: bubbleIn 0.6s 1.5s both;
+  }
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.8); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .typing-bubble::before {
+    content: "OCTOPUS";
+    position: absolute;
+    top: -16px;
+    left: 0;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--purple);
+    font-family: var(--mono);
+  }
+  .typing-dot {
+    width: 6px; height: 6px;
+    background: var(--purple);
+    border-radius: 50%;
+    animation: typingPulse 1.4s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingPulse {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  /* ============ STICKERS (themed mascots placed on specific slides) ============ */
+  .sticker {
+    position: absolute;
+    image-rendering: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,0.45));
+    transition: transform 0.4s ease;
+    z-index: 4;
+    animation: stickerWobble 4s ease-in-out infinite;
+  }
+  @keyframes stickerWobble {
+    0%, 100% { transform: rotate(var(--rot)) translateY(0); }
+    50%      { transform: rotate(calc(var(--rot) + 3deg)) translateY(-6px); }
+  }
+  .sticker:hover {
+    animation: none;
+    transform: rotate(0deg) scale(1.06);
+  }
+
+  .mascot-glow {
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(circle, var(--purple-glow), transparent 70%);
+    filter: blur(40px);
+    z-index: -1;
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* circling experiment chips around the mascot */
+  .orbit {
+    position: absolute;
+    inset: 0;
+    animation: rotate 30s linear infinite;
+  }
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .chip {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    background: rgba(124,111,247,0.08);
+    border: 1px solid var(--purple-dim);
+    color: var(--purple);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    animation: rotateReverse 30s linear infinite;
+  }
+  @keyframes rotateReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+  .chip:nth-child(1) { top: 0; left: 50%; transform: translate(-50%, 0); }
+  .chip:nth-child(2) { top: 25%; right: -20px; }
+  .chip:nth-child(3) { bottom: 25%; right: -10px; }
+  .chip:nth-child(4) { bottom: 0; left: 50%; transform: translate(-50%, 0); }
+  .chip:nth-child(5) { bottom: 25%; left: -30px; }
+  .chip:nth-child(6) { top: 25%; left: -10px; }
+
+  /* ============ SLIDE 2: PROBLEM ============ */
+  .problem {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .big-quote {
+    font-family: var(--serif);
+    font-size: clamp(40px, 4.8vw, 68px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+  }
+  .big-quote em { color: var(--purple); font-style: italic; }
+  .problem-lede {
+    margin-top: 24px;
+    max-width: 720px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+  }
+  .problem-lede strong { color: var(--ink); font-weight: 500; }
+  .problem-stats {
+    display: grid;
+    gap: 20px;
+  }
+  .stat-block {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 22px;
+    align-items: start;
+    padding: 22px 26px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    position: relative;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .stat-block:hover {
+    border-color: rgba(124,111,247,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.42);
+  }
+  .stat-block.solution {
+    border-color: rgba(124,111,247,0.32);
+    background: linear-gradient(180deg, rgba(124,111,247,0.09), rgba(124,111,247,0.018));
+  }
+  .stat-num {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    border: 1px solid rgba(124,111,247,0.28);
+    background: linear-gradient(155deg, rgba(124,111,247,0.20), rgba(124,111,247,0.03));
+    color: var(--purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 26px rgba(124,111,247,0.14);
+  }
+  .stat-block.solution .stat-num {
+    border-color: rgba(124,111,247,0.55);
+    background: linear-gradient(155deg, rgba(124,111,247,0.5), rgba(124,111,247,0.14));
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 30px rgba(124,111,247,0.3);
+  }
+  .stat-num svg {
+    width: 30px;
+    height: 30px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .stat-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .stat-index {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--purple);
+    padding: 6px 8px;
+    border: 1px solid rgba(124,111,247,0.18);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.02);
+  }
+  .stat-label {
+    display: block;
+    font-family: var(--serif);
+    font-size: 30px;
+    color: var(--purple);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-copy {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+  .stat-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .stat-point {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.04);
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .stat-block:hover .stat-point {
+    color: var(--ink);
+    border-color: rgba(124,111,247,0.28);
+  }
+  .stat-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .stat-col {
+    padding: 14px 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.025);
+  }
+  .stat-col-head {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .stat-col-copy {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  /* ============ SLIDE 3: ORIGIN STORY (DEMO PREVIEW) ============ */
+  .demo-frame {
+    background: var(--bg-2);
+    border: 1px solid var(--ink-faint);
+    border-radius: 16px;
+    overflow: hidden;
+    width: min(1040px, 100%, calc((100vh - 340px) * 16 / 9));
+    align-self: center;
+    margin: 0 auto;
+    box-shadow:
+      0 0 0 1px var(--purple-glow),
+      0 40px 120px rgba(0,0,0,0.6),
+      0 0 80px rgba(124,111,247,0.15);
+  }
+  .demo-frame-body {
+    padding: 0;
+    background: #05050a;
+    aspect-ratio: 16 / 9;
+  }
+  .demo-embed {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border: 0;
+    background: #05050a;
+  }
+  .demo-link-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px 20px;
+    width: min(1180px, 100%);
+    margin: 24px auto 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+  }
+  .demo-link-row .label {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    font-size: 11px;
+  }
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid var(--purple-dim);
+    border-radius: 999px;
+    background: rgba(124,111,247,0.08);
+    color: var(--purple);
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, color 0.2s;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .demo-link:hover, .demo-link:focus-visible {
+    background: rgba(124,111,247,0.18);
+    color: var(--ink);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .demo-link:focus-visible {
+    box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--purple);
+  }
+  .demo-link .arrow { transition: transform 0.2s; }
+  .demo-link:hover .arrow { transform: translateX(3px); }
+  .demo-fallback {
+    display: none;
+    padding: 48px 32px;
+    text-align: center;
+    color: var(--ink-dim);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .demo-fallback a { color: var(--purple); }
+
+  /* ============ SLIDE 4: WHAT IT DOES (LOOP) ============ */
+  .loop-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .loop-svg {
+    width: 100%;
+    max-width: 380px;
+  }
+  .loop-step {
+    fill: var(--bg-2);
+    stroke: var(--purple-dim);
+    stroke-width: 1.5;
+  }
+  .loop-step.active {
+    fill: var(--purple);
+    stroke: var(--purple);
+  }
+  .loop-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    fill: var(--ink);
+    text-anchor: middle;
+    letter-spacing: 0.05em;
+  }
+  .loop-arrow {
+    stroke: var(--ink-faint);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-dasharray: 4 4;
+  }
+  .loop-center {
+    fill: var(--purple-glow);
+    stroke: var(--purple);
+    stroke-width: 1;
+  }
+  .loop-center-text {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--ink);
+    text-anchor: middle;
+    font-style: italic;
+  }
+
+  .what-list {
+    list-style: none;
+  }
+  .what-list li {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .what-list li:last-child { border-bottom: none; }
+  .what-list .step {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--purple);
+    letter-spacing: 0.1em;
+  }
+  .what-list .what {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.25;
+  }
+  .what-list .what small {
+    display: block;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+
+  /* ============ SLIDE 5: TRACTION ============ */
+  .traction {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  .traction-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--ink-faint);
+    border: 1px solid var(--ink-faint);
+  }
+  .traction-cell {
+    background: var(--bg);
+    padding: 22px 24px;
+    transition: background 0.3s;
+  }
+  .traction-cell:hover {
+    background: var(--bg-2);
+  }
+  .traction-cell .num {
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .traction-cell .num em {
+    color: var(--purple);
+    font-style: normal;
+  }
+  .traction-cell .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-dim);
+  }
+  .traction-cell .sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .revenue-chart {
+    margin-top: 32px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 200px;
+    border-bottom: 1px solid var(--ink-faint);
+    padding-bottom: 8px;
+  }
+  .bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--purple-dim), var(--purple));
+    position: relative;
+    transition: transform 0.3s;
+    transform-origin: bottom;
+    animation: barRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform: scaleY(0);
+    box-shadow: 0 0 24px var(--purple-glow);
+  }
+  .bar.zero { background: var(--ink-faint); box-shadow: none; }
+  .bar-label {
+    position: absolute;
+    bottom: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .bar-value {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--purple);
+    font-weight: 500;
+  }
+  @keyframes barRise {
+    to { transform: scaleY(1); }
+  }
+
+  /* ============ SLIDE 6: WHY NOW / COMPETITION ============ */
+  .matrix {
+    display: grid;
+    grid-template-columns: 200px repeat(3, 1fr) 1fr;
+    gap: 1px;
+    background: var(--ink-faint);
+    border: 1px solid var(--ink-faint);
+    margin-top: 14px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .matrix-cell {
+    background: var(--bg);
+    padding: 11px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .matrix-cell.header {
+    background: var(--bg-2);
+    color: var(--ink);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    min-height: 56px;
+  }
+  .matrix-cell.row-label {
+    background: var(--bg-2);
+    color: var(--ink);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  .matrix-cell.octopus {
+    background: rgba(124,111,247,0.08);
+    color: var(--ink);
+    border-left: 1px solid var(--purple);
+  }
+  .matrix-sub {
+    display: block;
+    margin-top: 5px;
+    color: var(--ink-dim);
+    font-weight: 400;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    line-height: 1.4;
+  }
+  .matrix-strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .check { color: var(--acid); font-size: 18px; }
+  .cross { color: var(--ink-faint); font-size: 18px; }
+  .partial { color: var(--amber); font-size: 18px; }
+
+  /* ============ SLIDE 7: BUSINESS MODEL ============ */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .tier {
+    border: 1px solid var(--ink-faint);
+    padding: 32px;
+    position: relative;
+    transition: all 0.3s;
+    background: var(--bg-2);
+  }
+  .tier:hover {
+    border-color: var(--purple);
+    transform: translateY(-4px);
+  }
+  .tier.featured {
+    border-color: var(--purple);
+    background: linear-gradient(135deg, var(--bg-2), rgba(124,111,247,0.05));
+  }
+  .tier.featured::before {
+    content: "LE PLUS DEMANDÉ";
+    position: absolute;
+    top: -10px; left: 24px;
+    background: var(--purple);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 4px 8px;
+  }
+  .tier-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 16px;
+  }
+  .tier-price {
+    font-family: var(--serif);
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .tier-price em {
+    font-size: 16px;
+    font-style: normal;
+    color: var(--ink-dim);
+  }
+  .tier-desc {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .tier ul {
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  .tier ul li::before {
+    content: "→ ";
+    color: var(--purple);
+  }
+
+  /* ============ SLIDE 8: FOUNDER ============ */
+  .founder {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .founder-topline {
+    grid-column: 1 / -1;
+    font-family: var(--serif);
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 0.95;
+    color: var(--purple);
+    letter-spacing: -0.03em;
+    margin-bottom: -12px;
+  }
+  .founder-card {
+    border: 1px solid var(--ink-faint);
+    padding: 40px;
+    background: var(--bg-2);
+    position: relative;
+  }
+  .founder-card::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 24px; height: 24px;
+    border-top: 2px solid var(--purple);
+    border-left: 2px solid var(--purple);
+  }
+  .founder-card::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 24px; height: 24px;
+    border-bottom: 2px solid var(--purple);
+    border-right: 2px solid var(--purple);
+  }
+  .founder-name {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .founder-role {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0;
+  }
+  .founder-bio {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .founder-creds {
+    display: grid;
+    gap: 11px;
+  }
+  .cred {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .cred-label {
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cred-val { color: var(--ink); }
+
+  .founder-quote {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .founder-quote em { color: var(--purple); font-style: italic; }
+  .founder-quote .sig {
+    display: block;
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
+  .founder-side {
+    display: grid;
+    gap: 28px;
+    align-content: start;
+    justify-items: center;
+    margin-top: -56px;
+  }
+  .founder-photo {
+    border: 1px solid var(--ink-faint);
+    background: var(--bg-2);
+    aspect-ratio: 4 / 4.6;
+    overflow: hidden;
+    width: min(340px, 100%);
+    justify-self: center;
+    box-shadow:
+      0 0 0 1px var(--purple-glow),
+      0 30px 80px rgba(0,0,0,0.45);
+  }
+  .founder-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  /* ============ SLIDE 9: ASK / CLOSING ============ */
+  .ask {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ask-title {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5vw, 76px);
+    font-weight: 300;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .ask-title em { color: var(--purple); font-style: italic; }
+  .ask-sub {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    max-width: 620px;
+    margin-bottom: 56px;
+  }
+  .ask-mascot {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 16px;
+  }
+  .ask-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 32px;
+    background: var(--purple);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 0 40px var(--purple-glow);
+  }
+  .ask-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 80px var(--purple-glow);
+  }
+  .ask-cta .arrow {
+    transition: transform 0.3s;
+  }
+  .ask-cta:hover .arrow {
+    transform: translateX(4px);
+  }
+  .footer-info {
+    margin-top: 28px;
+    display: flex;
+    gap: 32px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .footer-info span { color: var(--purple); }
+
+  /* ============ REVEAL ON SCROLL ============ */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .enhanced .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s, transform 1s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============ RESPONSIVE ============ */
+
+  /* Large desktops & laptops (≤1400px): tighten padding, scale matrix */
+  @media (max-width: 1400px) {
+    .slide { padding: 110px 48px 72px; }
+    .slide-num { left: 48px; }
+    .slide-tag { right: 48px; }
+    .hero { gap: 56px; }
+    .problem, .loop-wrap, .traction, .founder { gap: 56px; }
+    .matrix { grid-template-columns: 180px repeat(3, 1fr) 1.2fr; }
+  }
+
+  /* Small laptops & large tablets (≤1200px): collapse nav to fewer items, reduce mascot */
+  @media (max-width: 1200px) {
+    .slide { padding: 100px 40px 64px; }
+    .slide-num { left: 40px; }
+    .slide-tag { right: 40px; }
+    .nav { padding: 14px 24px; font-size: 11px; }
+    .nav-right { gap: 16px; }
+    .mascot { width: 280px; height: 280px; }
+    .hero { gap: 40px; }
+    .hero-meta { gap: 32px; }
+    .traction { gap: 48px; }
+    .tiers { gap: 16px; }
+    .tier { padding: 24px; }
+    .matrix-cell { padding: 18px 14px; font-size: 12px; }
+    .matrix-cell.header { font-size: 11px; min-height: 92px; }
+    .matrix-sub { font-size: 12px; }
+  }
+
+  /* Tablets (≤1024px): drop secondary nav links, stack the founder layout */
+  @media (max-width: 1024px) {
+    .nav-right a:nth-child(n+5) { display: none; }
+    .hero { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: clamp(48px, 7.5vw, 96px); }
+    .problem { grid-template-columns: 1fr; gap: 40px; }
+    .founder { grid-template-columns: 1fr; gap: 48px; }
+    .founder-side { margin-top: 0; }
+    .traction { grid-template-columns: 1fr; gap: 48px; }
+    .loop-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .loop-svg { max-width: 420px; margin: 0 auto; }
+    .ask-title { font-size: clamp(48px, 7vw, 96px); }
+  }
+
+  /* Tablets portrait & large phones (≤900px): single column everywhere, hide decorative bits */
+  @media (max-width: 900px) {
+    .slide {
+      padding: 96px 24px 56px;
+      min-height: auto;
+    }
+    .slide-num { top: 76px; left: 24px; }
+    .slide-tag { top: 76px; right: 24px; }
+    .nav { padding: 12px 18px; font-size: 10px; }
+    .nav-right { display: none; }
+    .hero, .problem, .loop-wrap, .traction, .founder {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .hero { min-height: auto; }
+    .hero-title { font-size: clamp(44px, 10vw, 80px); }
+    .hero-sub { font-size: 13px; }
+    .hero-meta { flex-wrap: wrap; gap: 20px 32px; }
+    .mascot-wrap { order: -1; }
+    .mascot { width: 220px; height: 220px; }
+    .typing-bubble { right: -10px; padding: 8px 10px; }
+    .chip { font-size: 8px; padding: 3px 8px; }
+    .tiers { grid-template-columns: 1fr; gap: 16px; }
+    .tier-price { font-size: 40px; }
+    .traction-grid { grid-template-columns: 1fr 1fr; }
+    .traction-cell { padding: 24px 18px; }
+    .traction-cell .num { font-size: 44px; }
+    .revenue-chart { height: 160px; }
+    .matrix {
+      grid-template-columns: 1fr;
+      border-radius: 14px;
+    }
+    .matrix-cell { padding: 14px 16px; font-size: 13px; min-height: auto; }
+    .matrix-cell.header { padding: 18px 16px; min-height: auto; }
+    .matrix-cell.row-label {
+      background: rgba(124,111,247,0.12);
+      color: var(--purple);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+      padding-top: 22px;
+    }
+    .matrix-cell.octopus { border-left: none; border-top: 1px solid var(--purple); }
+    .big-quote { font-size: clamp(34px, 6vw, 52px); }
+    .founder-card { padding: 28px; }
+    .founder-name { font-size: 30px; }
+    .founder-bio { font-size: 12px; }
+    .cred { grid-template-columns: 1fr; gap: 4px; }
+    .cred-label { font-size: 10px; }
+    .founder-quote { font-size: clamp(26px, 4.5vw, 40px); }
+    .founder-photo { width: min(280px, 100%); }
+    .ask-title { font-size: clamp(40px, 9vw, 72px); }
+    .ask-sub { font-size: 13px; }
+    .ask-cta { padding: 16px 24px; font-size: 12px; }
+    .footer-info {
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      justify-content: center;
+      margin-top: 56px;
+    }
+    .sticker { display: none; }
+  }
+
+  /* Phones (≤640px): denser type, tighter padding, single column for everything */
+  @media (max-width: 640px) {
+    .slide {
+      padding: 88px 18px 48px;
+    }
+    .slide-num { top: 70px; left: 18px; font-size: 10px; }
+    .slide-tag { top: 70px; right: 18px; font-size: 10px; }
+    .nav { padding: 10px 14px; }
+    .nav-left span { font-size: 9px; letter-spacing: 0.1em; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.2em; margin-bottom: 18px; }
+    .hero { gap: 36px; }
+    .hero-title { font-size: clamp(38px, 11vw, 64px); margin-bottom: 24px; }
+    .hero-sub { font-size: 12px; margin-bottom: 32px; }
+    .hero-meta { gap: 18px 24px; font-size: 11px; }
+    .hero-meta strong { font-size: 13px; }
+    .mascot { width: 180px; height: 180px; }
+    .typing-bubble { display: none; }
+    .orbit { display: none; }
+    .big-quote { font-size: clamp(28px, 7vw, 42px); }
+    .problem-lede { font-size: 13px; }
+    .stat-block {
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      padding: 18px 18px;
+    }
+    .stat-num { width: 56px; height: 56px; border-radius: 14px; }
+    .stat-num svg { width: 24px; height: 24px; }
+    .stat-label { font-size: 24px; }
+    .stat-copy { font-size: 12px; }
+    .stat-split { grid-template-columns: 1fr; gap: 10px; }
+    .what-list li {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 18px 0;
+    }
+    .what-list .what { font-size: 18px; }
+    .what-list .what small { font-size: 12px; }
+    .loop-svg { max-width: 320px; }
+    /* 16:9 collapses to an unusably short embed on phones — give the demo app real height */
+    .demo-frame-body {
+      aspect-ratio: auto;
+      height: 78vh;
+      min-height: 460px;
+      max-height: 620px;
+    }
+    .traction-grid { grid-template-columns: 1fr; }
+    .traction-cell .num { font-size: 40px; }
+    .revenue-chart { height: 140px; gap: 6px; }
+    .bar-value { font-size: 9px; top: -18px; }
+    .bar-label { font-size: 8px; }
+    .tier { padding: 22px; }
+    .tier-price { font-size: 36px; }
+    .founder-card { padding: 22px; }
+    .founder-name { font-size: 26px; }
+    .founder-quote { font-size: clamp(22px, 5.5vw, 32px); }
+    .founder-photo { width: min(240px, 100%); }
+    .ask-title {
+      font-size: clamp(34px, 10vw, 56px);
+      margin-bottom: 24px;
+    }
+    .ask-mascot { width: 72px; height: 72px; }
+    /* Ask use-of-funds grid -> single column */
+    .ask > div[style*="grid-template-columns:repeat(3,1fr)"] {
+      grid-template-columns: 1fr !important;
+    }
+    /* Inbound logos banner: scale down serif logos */
+    .traction-cell span[style*="font-size:22px"] {
+      font-size: 16px !important;
+    }
+    .footer-info { font-size: 10px; gap: 10px 18px; }
+  }
+
+  /* Very small phones (≤380px): final squeeze */
+  @media (max-width: 380px) {
+    .slide { padding: 80px 14px 40px; }
+    .slide-num, .slide-tag { font-size: 9px; }
+    .hero-title { font-size: clamp(32px, 12vw, 52px); }
+    .big-quote { font-size: clamp(24px, 8vw, 36px); }
+    .ask-title { font-size: clamp(28px, 11vw, 44px); }
+    .nav-left span { font-size: 8px; }
+  }
+
+  /* Short landscape phones: keep slides compact, don't force 100vh */
+  @media (max-height: 600px) and (orientation: landscape) {
+    .slide { min-height: auto; padding-top: 96px; padding-bottom: 48px; }
+    .hero { min-height: auto; }
+  }
+
+  /* ===== Short-viewport safety net (desktop) =====
+     vw-based type & fixed spacing don't react to viewport HEIGHT, so on
+     short windows dense slides would overflow. These tiers tighten type &
+     spacing keyed to height — full-bleed, no transform/scaling. */
+  @media (min-width: 1025px) and (max-height: 880px) {
+    .slide { padding: 60px 64px 40px; }
+    .slide-num { top: 54px; }
+    .slide h2 { margin-bottom: 18px !important; }
+    .hero-title { font-size: clamp(20px, 2.4vw, 34px); margin-bottom: 13px; }
+    .loop-wrap { gap: 44px; }
+    .what-list li { padding: 9px 0; }
+    .matrix { margin-top: 10px; }
+    .matrix-cell { padding: 9px 14px; }
+    .matrix-cell.header { min-height: 46px; }
+    .traction-cell { padding: 16px 24px; }
+    .traction-cell .num { font-size: 48px; }
+    .revenue-chart { margin-top: 22px; height: 168px; }
+    .founder-bio { margin-bottom: 14px; padding-bottom: 12px; }
+    .founder-creds { gap: 8px; }
+    .ask-title { font-size: clamp(36px, 4.4vw, 64px); margin-bottom: 16px; }
+    .ask-mascot { width: 64px; height: 64px; margin: 0 auto 12px; }
+    .footer-info { margin-top: 20px; }
+    .problem { gap: 56px; }
+    .problem-stats { gap: 15px; }
+    .stat-block { padding: 16px 20px; }
+    .big-quote { font-size: clamp(34px, 4.2vw, 58px); }
+  }
+  @media (min-width: 1025px) and (max-height: 820px) {
+    .slide { padding: 38px 64px 26px; }
+    .slide-num { top: 34px; }
+    .slide h2 { font-size: clamp(22px, 2.7vw, 34px) !important; margin-bottom: 14px !important; }
+    .hero-title { font-size: clamp(18px, 2.1vw, 30px); margin-bottom: 9px; }
+    .loop-wrap { gap: 32px; }
+    .loop-svg { max-width: 320px; }
+    .what-list li { padding: 7px 0; }
+    .what-list .what { font-size: 16px; }
+    .what-list .what small { font-size: 11px; }
+    .matrix { margin-top: 6px; }
+    .matrix-cell { padding: 6px 12px; font-size: 11.5px; }
+    .matrix-cell.header { min-height: 38px; font-size: 10.5px; }
+    .matrix-sub { font-size: 11px; margin-top: 3px; }
+    .traction-cell { padding: 11px 22px; }
+    .traction-cell .num { font-size: 40px; }
+    .traction-cell .sub { margin-top: 8px; }
+    .revenue-chart { margin-top: 16px; height: 140px; }
+    .founder-bio { font-size: 12px; line-height: 1.5; margin-bottom: 10px; padding-bottom: 10px; }
+    .founder-creds { gap: 6px; }
+    .ask-title { font-size: clamp(30px, 3.8vw, 52px); margin-bottom: 12px; }
+    .ask-mascot { width: 54px; height: 54px; margin: 0 auto 10px; }
+    .footer-info { margin-top: 14px; }
+    /* s2 problem */
+    .problem { gap: 48px; }
+    .big-quote { font-size: clamp(30px, 3.4vw, 50px); }
+    .problem-lede { margin-top: 14px; font-size: 13px; line-height: 1.55; }
+    .problem-stats { gap: 12px; }
+    .stat-block { padding: 12px 18px; grid-template-columns: 56px 1fr; gap: 16px; }
+    .stat-num { width: 56px; height: 56px; }
+    .stat-num svg { width: 26px; height: 26px; }
+    .stat-meta { margin-bottom: 7px; }
+    .stat-label { font-size: 24px; }
+    .stat-copy { font-size: 12px; line-height: 1.5; }
+    /* s8 founder */
+    .founder { gap: 44px; }
+    .founder-topline { font-size: clamp(34px, 4vw, 56px); margin-bottom: -8px; }
+    .founder-card { padding: 28px; }
+    .founder-name { font-size: 30px; }
+    .founder-quote { font-size: clamp(26px, 3.4vw, 42px); }
+    .founder-quote .sig { margin-top: 18px; }
+  }
+
+  /* Ultra-wide screens (≥1900px): cap content width so slides don't sprawl */
+  @media (min-width: 1900px) {
+    .slide {
+      padding-left: max(64px, calc((100vw - 1720px) / 2));
+      padding-right: max(64px, calc((100vw - 1720px) / 2));
+    }
+    .slide-num { left: max(64px, calc((100vw - 1720px) / 2)); }
+    .slide-tag { right: max(64px, calc((100vw - 1720px) / 2)); }
+  }
+
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .orbit, .chip, .mascot-glow, .typing-bubble { animation: none !important; }
+  }
+
+  /* ============ PRINT / PDF EXPORT ============
+     Targets letter & A4 landscape at common deck dimensions.
+     Tell browsers to: keep slide colors, one slide per page,
+     drop nav/animations, swap the iframe for a printable link card. */
+  @page {
+    size: 1280px 800px;
+    margin: 0;
+  }
+  @media print {
+    html, body {
+      background: #05050a !important;
+      color: #f4f1e8 !important;
+      overflow: visible !important;
+      scroll-behavior: auto !important;
+    }
+    /* Freeze every animation at its resting frame and keep colors exact */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      animation: none !important;
+      transition: none !important;
+    }
+    body::before, body::after { display: none !important; }
+
+    .nav { display: none !important; }
+
+    .slide {
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      min-height: 800px;
+      height: 800px;
+      padding: 40px 56px 34px;
+      border-bottom: none;
+      overflow: hidden;
+      justify-content: center;
+    }
+    .slide:last-of-type {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .slide-num, .slide-tag { top: 20px; }
+    .slide-num { left: 56px; }
+    .slide-tag { right: 56px; }
+
+    /* Show every reveal-on-scroll / entrance-animated element in its final state */
+    .reveal,
+    .enhanced .reveal,
+    .enhanced .eyebrow,
+    .enhanced .hero-title,
+    .enhanced .hero-sub,
+    .enhanced .hero-meta,
+    .enhanced .mascot-wrap {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .bar { transform: scaleY(1) !important; }
+
+    /* KEEP the brand visuals — mascot, glow, orbit chips, typing bubble, stickers —
+       frozen at their resting position instead of hiding them. */
+    .mascot-wrap, .mascot, .mascot-glow, .typing-bubble,
+    .orbit, .chip, .sticker, .ask-mascot, .trusted, .trusted-logos img {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: revert !important;
+    }
+    .sticker { transform: rotate(var(--rot)) !important; width: 104px !important; height: auto !important; }
+    /* Cap the hero mascot so the hero (text + mascot + partner logos) clears one page */
+    .mascot { width: 210px !important; height: 210px !important; }
+    .mascot-glow { inset: -24px !important; }
+
+    /* Chrome evaluates print media queries at a narrow width, which collapses the
+       multi-column layouts to stacked single columns and overflows the page.
+       Force the desktop side-by-side layouts back (the page box is 1280px wide). */
+    .hero { grid-template-columns: 1.4fr 1fr !important; gap: 56px !important; align-items: center !important; }
+    .mascot-wrap { order: 0 !important; }
+    .loop-wrap { grid-template-columns: 1fr 1.2fr !important; gap: 48px !important; align-items: center !important; }
+    .founder { grid-template-columns: 1fr 1.4fr !important; gap: 56px !important; align-items: center !important; }
+    .founder-side { margin-top: 0 !important; }
+    .founder-photo { width: min(300px, 100%) !important; }
+    /* Problem (s2): keep headline+lede left, the 3 stat cards right — not stacked.
+       Compact the cards so the taller right column keeps clear top/bottom margin
+       instead of sitting flush against the page edges (reads as clipped). */
+    .problem { grid-template-columns: 1.05fr 0.95fr !important; gap: 44px !important; align-items: center !important; }
+    .problem-stats { gap: 14px !important; }
+    .stat-block { padding: 14px 20px !important; gap: 16px !important; }
+    .stat-num { width: 48px !important; height: 48px !important; border-radius: 12px !important; }
+    .stat-num svg { width: 24px !important; height: 24px !important; }
+    .stat-block .stat-num { width: 48px !important; }
+    .problem-stats .stat-block { grid-template-columns: 48px 1fr !important; }
+    .stat-meta { margin-bottom: 8px !important; }
+    .stat-label { font-size: 23px !important; }
+    .stat-copy { font-size: 12px !important; line-height: 1.5 !important; }
+    .stat-points { margin-top: 9px !important; gap: 6px !important; }
+    .stat-point { padding: 4px 9px !important; }
+    .stat-split { margin-top: 10px !important; gap: 12px !important; }
+    .stat-col { padding: 10px 13px !important; }
+    /* Moat (s6): force the comparison matrix back to a real table, not a stacked list */
+    .matrix { grid-template-columns: 200px repeat(3, 1fr) 1fr !important; }
+    .matrix-cell.header { min-height: 56px !important; }
+    .matrix-cell.row-label {
+      background: var(--bg-2) !important;
+      color: var(--ink) !important;
+      text-transform: none !important;
+      letter-spacing: 0.05em !important;
+      font-size: 12px !important;
+      padding-top: 11px !important;
+    }
+    .matrix-cell.octopus { border-left: 1px solid var(--purple) !important; border-top: none !important; }
+    /* Business model (s7): keep the 3 pricing tiers side-by-side */
+    .tiers { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin-top: 24px !important; }
+    /* Traction (s5): keep headline+chart left, the stat grid right — stacking
+       blows the chart up full-width and pushes the bottom rows off the page */
+    .traction { grid-template-columns: 1fr 1fr !important; gap: 48px !important; align-items: center !important; }
+    .traction-grid { grid-template-columns: 1fr 1fr !important; }
+    .revenue-chart { height: 150px !important; }
+    .traction-cell { padding: 13px 20px !important; }
+    .traction-cell .num { font-size: 38px !important; }
+    /* Moat (s6): the table fills the whole slide, so the corner sticker would
+       always cover data — drop just this one (all other stickers stay) */
+    #s6 .sticker { display: none !important; }
+
+    /* Mild serif-headline caps so the big type always clears the page */
+    .hero-title { font-size: clamp(22px, 2.5vw, 32px) !important; }
+    .big-quote { font-size: clamp(34px, 4vw, 52px) !important; }
+    .ask-title { font-size: 60px !important; }
+    .founder-quote { font-size: 30px !important; }
+
+    /* Founder photo: cap so the right column can't overrun the page */
+    .founder-side { margin-top: 0 !important; }
+    .founder-photo { width: min(300px, 100%) !important; }
+
+    /* The iframe will not render in print/PDF — replace it with a printable link card */
+    .demo-frame { display: none !important; }
+    .demo-link-row {
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .demo-link {
+      border: 1px solid #7C6FF7 !important;
+      color: #7C6FF7 !important;
+      background: rgba(124,111,247,0.08) !important;
+      padding: 14px 22px;
+      font-size: 14px;
+    }
+    .demo-link[href]::after {
+      content: " — " attr(href);
+      color: #8a8aa0;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Hyperlinks: expose the URL on the printed page */
+    a[href^="http"]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.85em;
+      color: #8a8aa0;
+      letter-spacing: 0.02em;
+    }
+    .ask-cta::after { content: "" !important; }
+    .nav-right a::after { content: "" !important; }
+
+    /* Keep multi-cell blocks intact on a page */
+    .matrix { page-break-inside: avoid; break-inside: avoid; }
+    .tier, .stat-block, .traction-cell, .founder-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="no-js">
+
+<!-- ============ NAVIGATION ============ -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="nav-dot"></span>
+    <span>OCTOPUS / PRÉSENTATION COMMERCIALE · 2026</span>
+  </div>
+  <div class="nav-right">
+    <a onclick="scrollTo('s1')">01 · Aperçu</a>
+    <a onclick="scrollTo('s2')">02 · Problème</a>
+    <a onclick="scrollTo('s3')">03 · Produit</a>
+    <a onclick="scrollTo('s4')">04 · Démo</a>
+    <a onclick="scrollTo('s5')">05 · Preuves</a>
+    <a onclick="scrollTo('s6')">06 · Pourquoi nous</a>
+    <a onclick="scrollTo('s7')">07 · Tarifs</a>
+    <a onclick="scrollTo('s8')">08 · Confiance</a>
+    <a onclick="scrollTo('s9')">09 · Lancer un PoC</a>
+  </div>
+</nav>
+
+<!-- mascot loaded as image from /mnt/user-data/outputs/octopus-mascot.webp -->
+
+<!-- ============ SLIDE 1: HERO ============ -->
+<section class="slide" id="s1">
+  <div class="slide-num">001 / 009</div>
+  <div class="slide-tag">DATA SCIENTIST IA POUR L'ENTREPRISE</div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Une équipe data science, à la demande</div>
+      <h1 class="hero-title">
+        Hey OctOpus,<br>
+        <em>Connecte</em> mon entrepôt de données.<br>
+        <em>Transforme</em> mes données de ventes.<br>
+        <em>Montre</em> mes meilleurs clients.<br>
+        Crée un <em>tableau de bord</em>.<br>
+        <em>Prévois</em> le chiffre du prochain trimestre.
+      </h1>
+      <p class="hero-sub">
+        Pointez OctOpus vers votre source — <em>Databricks, Snowflake, BigQuery, Postgres, un fichier</em> — et discutez normalement. Il se connecte, nettoie, analyse, crée des tableaux de bord en direct, puis entraîne &amp; déploie des modèles de prévision — le travail d'une équipe data science complète, sans file d'attente d'embauche ni backlog. <strong style="color:var(--ink)">Vos analystes, consultants et opérationnels font la data science eux-mêmes</strong> — en heures, pas en trimestres.
+      </p>
+      <div class="hero-meta">
+        <div>SE CONNECTE À<strong>Databricks · Snowflake · BigQuery</strong></div>
+        <div>DÉPLOIEMENT<strong>Dans votre environnement</strong></div>
+        <div>DÉLAI DE VALEUR<strong>Des heures, pas des trimestres</strong></div>
+        <div>ÉPROUVÉ<strong>En production chez des Fortune 500</strong></div>
+      </div>
+    </div>
+    <div class="mascot-wrap">
+      <div class="mascot-glow"></div>
+      <div class="mascot">
+        <img src="octopus-mascot.webp" alt="OctOpus mascot" />
+        <div class="typing-bubble">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+        <div class="orbit">
+          <span class="chip">CONNECTE</span>
+          <span class="chip">NETTOIE</span>
+          <span class="chip">ANALYSE</span>
+          <span class="chip">VISUALISE</span>
+          <span class="chip">PRÉVOIT</span>
+          <span class="chip">DÉPLOIE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="trusted">
+    <div class="trusted-label">Partenaires &amp; Programmes</div>
+    <div class="trusted-logos">
+      <img src="assets/partners/nvidia-inception.png" alt="NVIDIA Inception" />
+      <img src="assets/partners/google-cloud.png" alt="Google Cloud for Startups" />
+      <img src="assets/partners/microsoft.png" alt="Microsoft for Startups" />
+      <img src="assets/partners/aws.png" alt="AWS Startups" />
+      <img src="assets/partners/founders-inc.png" alt="Founders Inc" />
+      <img src="assets/partners/ai-sweden.png" alt="AI Sweden" />
+      <img src="assets/partners/ai-gothenburg.png" alt="AI Gothenburg" />
+      <img src="assets/partners/gaia.png" alt="Gothenburg AI Alliance" />
+      <img src="assets/partners/ignite.png" alt="Ignite Nordic" />
+      <img src="assets/partners/station-f.png" alt="Station F" />
+      <img src="assets/partners/vivatech.png" alt="VivaTech" />
+      <img src="assets/partners/dakar-angels.png" alt="Dakar Angels Network" />
+      <img src="assets/partners/adepme.png" alt="ADEPME" />
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: PROBLEM ============ -->
+<section class="slide" id="s2">
+  <div class="slide-num">002 / 009</div>
+  <div class="slide-tag">LE PROBLÈME</div>
+  <img class="sticker" src="sticker-huh.png" alt="" style="bottom:8%;left:4%;width:140px;--rot:-10deg" />
+  <div class="problem">
+    <div>
+      <div class="eyebrow reveal">Le problème</div>
+      <h2 class="big-quote reveal">
+        Des modèles fiables, <em style="color:var(--ink);font-style:italic">à la demande</em>, pour des décisions qui ne peuvent pas attendre.
+      </h2>
+      <p class="problem-lede reveal">
+        Passer d'un entrepôt brut à une décision implique encore des exports, du SQL, des notebooks, des packages, de la validation, des reprises et du déploiement — un travail qui exige des talents data science rares, coûteux et déjà débordés. Toute la boucle est trop technique et trop manuelle.
+      </p>
+    </div>
+    <div class="problem-stats">
+      <div class="stat-block reveal">
+        <div class="stat-num" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="4" y="9" width="16" height="11" rx="2.5"></rect>
+            <path d="M12 9V5.4"></path>
+            <circle cx="12" cy="4" r="1.5"></circle>
+            <path d="M8.8 14h.01"></path>
+            <path d="M15.2 14h.01"></path>
+            <path d="M9.5 17.3h5"></path>
+            <path d="M2 13.5v3"></path>
+            <path d="M22 13.5v3"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-meta">
+            <span class="stat-index">01</span>
+            <span class="stat-label">AutoML dépassé</span>
+          </div>
+          <div class="stat-copy">Compare des modèles. Mais il faut toujours un expert pour cadrer la tâche, itérer, déboguer et déployer.</div>
+          <div class="stat-points">
+            <span class="stat-point">Aucun raisonnement</span>
+            <span class="stat-point">Aucun contexte</span>
+            <span class="stat-point">Aucun auto-débogage</span>
+            <span class="stat-point">Aucun déploiement</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-block reveal">
+        <div class="stat-num" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3 3 7.5l9 4.5 9-4.5L12 3Z"></path>
+            <path d="m3 12 9 4.5 9-4.5"></path>
+            <path d="m3 16.5 9 4.5 9-4.5"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-meta">
+            <span class="stat-index">02</span>
+            <span class="stat-label">Douleur / Complexité</span>
+          </div>
+          <div class="stat-copy">Des modèles fiables, c'est encore des notebooks, des outils de code, des packages, du MLOps et des allers-retours avec des experts.</div>
+          <div class="stat-points">
+            <span class="stat-point">Notebooks</span>
+            <span class="stat-point">Outils de code</span>
+            <span class="stat-point">Packages</span>
+            <span class="stat-point">MLOps</span>
+            <span class="stat-point">Expertise</span>
+            <span class="stat-point">Temps</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-block solution reveal">
+        <div class="stat-num" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 18a8 8 0 1 1 16 0"></path>
+            <path d="m12 18 4.2-5.4"></path>
+            <circle cx="12" cy="18" r="1.3" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-meta">
+            <span class="stat-index">03</span>
+            <span class="stat-label">Fiabilité et rapidité</span>
+          </div>
+          <div class="stat-copy">OctOpus est nativement IA. Il fait le raisonnement et transforme une seule question en un modèle fiable et déployé.</div>
+          <div class="stat-split">
+            <div class="stat-col">
+              <span class="stat-col-head">Data scientists</span>
+              <div class="stat-col-copy">Construisez et déployez des modèles fiables plus vite et plus souvent.</div>
+            </div>
+            <div class="stat-col">
+              <span class="stat-col-head">Utilisateurs métier</span>
+              <div class="stat-col-copy">« Prévois X par Y pour Z. » Posez la question sur de vraies données, obtenez visuels et tableaux de bord, puis construisez et déployez le modèle.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: PRODUCT ============ -->
+<section class="slide" id="s3">
+  <div class="slide-num">003 / 009</div>
+  <div class="slide-tag">LE PRODUIT</div>
+  <img class="sticker" src="sticker-code.png" alt="" style="bottom:10%;right:5%;width:170px;--rot:-8deg" />
+  <div class="eyebrow reveal">Une seule conversation</div>
+  <h2 class="reveal" style="font-size:clamp(28px,3.6vw,46px);margin-bottom:24px;max-width:900px;font-weight:300">
+    De votre <em style="color:var(--purple);font-style:italic">entrepôt brut</em> à une réponse claire, un tableau de bord en direct et un modèle déployé.<br>
+    Vous parlez, simplement — et vous obtenez une expertise data science rare et coûteuse, à la demande.
+  </h2>
+
+  <div class="loop-wrap">
+    <svg class="loop-svg" viewBox="0 0 400 400">
+      <!-- arrows -->
+      <path class="loop-arrow" d="M 200,60 A 140,140 0 0,1 340,200" />
+      <path class="loop-arrow" d="M 340,200 A 140,140 0 0,1 200,340" />
+      <path class="loop-arrow" d="M 200,340 A 140,140 0 0,1 60,200" />
+      <path class="loop-arrow" d="M 60,200 A 140,140 0 0,1 200,60" />
+      <polygon points="335,195 343,200 335,205" fill="var(--ink-faint)"/>
+      <polygon points="205,335 200,343 195,335" fill="var(--ink-faint)"/>
+      <polygon points="65,205 57,200 65,195" fill="var(--ink-faint)"/>
+      <polygon points="195,65 200,57 205,65" fill="var(--ink-faint)"/>
+
+      <!-- center -->
+      <circle class="loop-center" cx="200" cy="200" r="50"/>
+      <text class="loop-center-text" x="200" y="195">octopus</text>
+      <text class="loop-center-text" x="200" y="215" style="font-size:10px;font-family:var(--mono);font-style:normal;fill:var(--ink-dim);letter-spacing:0.15em">AGENT</text>
+
+      <!-- steps -->
+      <g>
+        <circle class="loop-step" cx="200" cy="50" r="38"/>
+        <text class="loop-text" x="200" y="48">PENSE</text>
+        <text class="loop-text" x="200" y="62" style="fill:var(--ink-dim);font-size:9px">fait un plan</text>
+      </g>
+      <g>
+        <circle class="loop-step" cx="350" cy="200" r="38"/>
+        <text class="loop-text" x="350" y="198">ESSAIE</text>
+        <text class="loop-text" x="350" y="212" style="fill:var(--ink-dim);font-size:9px">teste l'idée</text>
+      </g>
+      <g>
+        <circle class="loop-step" cx="200" cy="350" r="38"/>
+        <text class="loop-text" x="200" y="348">VÉRIFIE</text>
+        <text class="loop-text" x="200" y="362" style="fill:var(--ink-dim);font-size:9px">ça marche ?</text>
+      </g>
+      <g>
+        <circle class="loop-step" cx="50" cy="200" r="38"/>
+        <text class="loop-text" x="50" y="198">CORRIGE</text>
+        <text class="loop-text" x="50" y="212" style="fill:var(--ink-dim);font-size:9px">fait mieux</text>
+      </g>
+    </svg>
+
+    <ul class="what-list">
+      <li class="reveal">
+        <span class="step">01 →</span>
+        <span class="what">« Connecte-toi à mes données de ventes dans Databricks. »
+          <small>OctOpus se connecte à votre source — Databricks, Snowflake, BigQuery, Postgres ou un fichier — et la charge. Aucun export, aucune requête.</small>
+        </span>
+      </li>
+      <li class="reveal">
+        <span class="step">02 →</span>
+        <span class="what">« Nettoie-les et montre-moi mes meilleurs clients. »
+          <small>Il transforme les données et répond — vos meilleurs clients, classés, avec les chiffres à l'appui.</small>
+        </span>
+      </li>
+      <li class="reveal">
+        <span class="step">03 →</span>
+        <span class="what">« Crée-moi un tableau de bord à partir de ça. »
+          <small>Il génère un tableau de bord interactif et en direct de vos ventes — sans outil BI, sans configuration.</small>
+        </span>
+      </li>
+      <li class="reveal">
+        <span class="step">04 →</span>
+        <span class="what">« Prévois le chiffre du prochain trimestre — entraîne un modèle. »
+          <small>Il construit, teste et déploie un modèle de prévision, puis vous remet la prédiction. Une conversation, des données brutes à un modèle déployé.</small>
+        </span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: DEMO ============ -->
+<section class="slide" id="s4">
+  <div class="slide-num">004 / 009</div>
+  <div class="slide-tag">DÉMO</div>
+  <img class="sticker" src="sticker-code.png" alt="" style="bottom:10%;right:5%;width:170px;--rot:-8deg" />
+  <div class="eyebrow reveal" style="text-align:center;margin-bottom:8px">Voyez-le à l'œuvre</div>
+  <h2 class="reveal" style="text-align:center;font-size:clamp(26px,3.2vw,40px);margin-bottom:22px;font-weight:300">
+    Regardez une conversation passer de données brutes à un modèle déployé.
+  </h2>
+
+  <div class="demo-frame reveal">
+    <div class="demo-frame-body">
+      <iframe
+        class="demo-embed"
+        src="how-to-use.html"
+        title="OctOpus how-to-use demo — interactive walkthrough"
+        aria-label="OctOpus how-to-use demo — interactive walkthrough"
+        loading="eager"
+        referrerpolicy="no-referrer"
+      ></iframe>
+      <noscript>
+        <div class="demo-fallback" style="display:block">
+          La démo interactive nécessite un lecteur compatible avec les iframes.
+          Ouvrez-la directement : <a href="how-to-use.html" target="_blank" rel="noopener">how-to-use.html</a>
+          ou rendez-vous sur <a href="https://www.octoopus.dev/" target="_blank" rel="noopener">www.octoopus.dev</a>.
+        </div>
+      </noscript>
+    </div>
+  </div>
+
+  <div class="demo-link-row reveal">
+    <span class="label">Ouvrir la démo</span>
+    <a class="demo-link" href="how-to-use.html" target="_blank" rel="noopener" aria-label="Ouvrir la démo interactive OctOpus dans un nouvel onglet">
+      <span>how-to-use.html</span>
+      <span class="arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="demo-link" href="https://www.octoopus.dev/" target="_blank" rel="noopener" aria-label="Ouvrir le site OctOpus dans un nouvel onglet">
+      <span>www.octoopus.dev</span>
+      <span class="arrow" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: TRACTION ============ -->
+<section class="slide" id="s5">
+  <div class="slide-num">005 / 009</div>
+  <div class="slide-tag">PREUVES</div>
+  <img class="sticker" src="sticker-approved.png" alt="" style="bottom:6%;left:3%;width:130px;--rot:-12deg" />
+  <div class="traction">
+    <div>
+      <div class="eyebrow reveal">Déjà en production avec de vraies équipes</div>
+      <h2 class="reveal" style="font-size:clamp(30px,3.8vw,48px);font-weight:300;margin-bottom:18px">
+        De vraies équipes. De vraies données. <em style="color:var(--purple);font-style:italic">De vrais problèmes résolus.</em>
+      </h2>
+      <p class="reveal" style="font-family:var(--mono);font-size:13px;color:var(--ink-dim);line-height:1.7;max-width:480px">
+        Votre équipe ne veut pas juste une prédiction. Elle veut qu'OctOpus <em style="color:var(--ink);font-style:normal">fasse tout le travail</em> — analyser les données, construire le modèle, remplir les rapports et les rendre prêts à l'emploi. C'est exactement ce qu'il fait aujourd'hui.
+      </p>
+
+      <div style="margin-top:24px">
+        <div class="eyebrow reveal" style="margin-bottom:12px">Ce que les équipes en retirent</div>
+        <ul class="reveal" style="list-style:none;font-family:var(--mono);font-size:13px;color:var(--ink);line-height:2;max-width:480px">
+          <li style="border-bottom:1px solid var(--ink-faint);padding:6px 0"><span style="color:var(--purple)">→ </span>Des réponses à partir de données brutes en quelques heures</li>
+          <li style="border-bottom:1px solid var(--ink-faint);padding:6px 0"><span style="color:var(--purple)">→ </span>Tableaux de bord en direct et modèles déployés, sans MLOps</li>
+          <li style="padding:6px 0"><span style="color:var(--purple)">→ </span>Rapports remplis automatiquement, prêts à envoyer</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="traction-grid reveal">
+      <div class="traction-cell">
+        <div class="num"><em>200+</em></div>
+        <div class="label">Professionnels l'utilisent</div>
+        <div class="sub">Analystes, chercheurs, consultants, équipes de grands groupes</div>
+      </div>
+      <div class="traction-cell">
+        <div class="num"><em>9</em></div>
+        <div class="label">PoCs entreprise en cours</div>
+        <div class="sub">Logistique, lean management, deeptech, pétrole & gaz, SaaS · USA, France, Suède, Afrique</div>
+      </div>
+      <div class="traction-cell">
+        <div class="num"><em>4<span style="color:var(--ink-dim);font-size:24px"> / 9</span></em></div>
+        <div class="label">PoCs convertis en payant</div>
+        <div class="sub">Les autres en phase finale de déploiement · les PoCs deviennent des contrats</div>
+      </div>
+      <div class="traction-cell">
+        <div class="num"><em>Heures</em></div>
+        <div class="label">Des données au modèle</div>
+        <div class="sub">Le travail qui prend des semaines à des mois avec une embauche ou l'AutoML</div>
+      </div>
+
+      <!-- INBOUND BIG-LOGOS BANNER -->
+      <div class="traction-cell" style="grid-column:1 / -1;background:rgba(124,111,247,0.08);border-top:1px solid var(--purple);padding:28px 24px">
+        <div class="label" style="color:var(--purple);margin-bottom:14px">ÉCHANGES ENTRANTS · T2 2026</div>
+        <div style="display:flex;flex-wrap:wrap;gap:20px 28px;align-items:center;margin-bottom:14px">
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">IBM</span>
+          <span style="color:var(--ink-faint)">·</span>
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">Volvo Group</span>
+          <span style="color:var(--ink-faint)">·</span>
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">SKF</span>
+          <span style="color:var(--ink-faint)">·</span>
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">Ericsson</span>
+          <span style="color:var(--ink-faint)">·</span>
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">AstraZeneca</span>
+          <span style="color:var(--ink-faint)">·</span>
+          <span style="font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--ink)">Actemium</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.05em;line-height:1.6">
+          Des appels de découverte entrants avec des entreprises du Fortune 500. Aucune prospection sortante — ce sont elles qui sont venues à nous.
+        </div>
+      </div>
+
+      <div class="traction-cell" style="grid-column:1 / -1;background:rgba(124,111,247,0.04);border-top:1px solid var(--ink-faint)">
+        <div class="label" style="color:var(--purple);margin-bottom:12px">UN EXEMPLE CONCRET</div>
+        <div style="font-family:var(--serif);font-size:20px;font-weight:300;line-height:1.4">
+          Un client industriel fabrique des bouteilles. OctOpus a analysé ses données qualité, identifié les défauts et rempli <em style="color:var(--purple);font-style:italic">10 sections de son rapport client existant</em> — automatiquement. Son équipe n'a eu qu'à signer et envoyer.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: WHY US / COMPETITION ============ -->
+<section class="slide" id="s6">
+  <div class="slide-num">006 / 009</div>
+  <div class="slide-tag">POURQUOI OCTOPUS</div>
+  <img class="sticker" src="sticker-cool.png" alt="" style="bottom:5%;right:4%;width:160px;--rot:8deg" />
+  <div class="eyebrow reveal">Comparé à vos alternatives</div>
+  <h2 class="reveal" style="font-size:clamp(26px,3.4vw,42px);font-weight:300;max-width:1100px">
+    Écrire du code, c'est facile. <em style="color:var(--purple);font-style:italic">Le savoir spécialisé et le raisonnement</em> sont ce que vous achetez vraiment.
+  </h2>
+  <p class="reveal" style="font-family:var(--mono);font-size:12px;color:var(--ink-dim);line-height:1.6;max-width:720px;margin-top:12px">
+    Claude, Codex et Cursor savent tous écrire du code. Le plus dur, c'est de savoir quoi tester, quoi corriger, à quoi se fier et quoi mettre en production pour votre problème de prévision précis. OctOpus fait ce raisonnement à votre place — et s'affine sur vos données à chaque exécution.
+  </p>
+
+  <div class="matrix reveal">
+    <div class="matrix-cell header"></div>
+    <div class="matrix-cell header">Outils AutoML<span class="matrix-sub">DataRobot, H2O, ML façon classement</span></div>
+    <div class="matrix-cell header">Agents de code<span class="matrix-sub">Claude, Codex, Cursor, copilotes génériques</span></div>
+    <div class="matrix-cell header">Recruter un data scientist<span class="matrix-sub">Solide, mais lent et coûteux à faire passer à l'échelle</span></div>
+    <div class="matrix-cell header" style="color:var(--purple)">OctOpus<span class="matrix-sub">Data science nativement IA pour spécialistes et opérationnels</span></div>
+
+    <div class="matrix-cell row-label">Ce qu'ils font le mieux</div>
+    <div class="matrix-cell">Comparer des modèles<span class="matrix-sub">Bien pour des flux ML structurés et restreints</span></div>
+    <div class="matrix-cell">Écrire du code<span class="matrix-sub">Utile, mais attend encore des instructions</span></div>
+    <div class="matrix-cell">Maîtriser le workflow<span class="matrix-sub">Vrai jugement, mais une personne à la fois</span></div>
+    <div class="matrix-cell octopus"><span class="matrix-strong">Raisonner, analyser, entraîner, restituer</span><span class="matrix-sub">Un seul système pour l'analyse et la data science</span></div>
+
+    <div class="matrix-cell row-label">Raisonnement spécialisé</div>
+    <div class="matrix-cell"><span class="cross">✗</span><span class="matrix-sub">Aucun vrai contexte métier ni jugement adaptatif</span></div>
+    <div class="matrix-cell"><span class="partial">~</span><span class="matrix-sub">Aide au code générale, pas une expertise en prévision</span></div>
+    <div class="matrix-cell"><span class="check">✓</span><span class="matrix-sub">Mais coûteux et pas toujours disponible</span></div>
+    <div class="matrix-cell octopus"><span class="check">✓</span><span class="matrix-sub">Raisonnement spécialisé pour de vraies décisions de modélisation</span></div>
+
+    <div class="matrix-cell row-label">Corrige les échecs et réessaie</div>
+    <div class="matrix-cell"><span class="cross">✗</span><span class="matrix-sub">S'arrête au benchmark</span></div>
+    <div class="matrix-cell"><span class="cross">✗</span><span class="matrix-sub">C'est encore à vous de diagnostiquer et de piloter</span></div>
+    <div class="matrix-cell"><span class="check">✓</span><span class="matrix-sub">Si la personne a le temps</span></div>
+    <div class="matrix-cell octopus"><span class="check">✓</span><span class="matrix-sub">Auto-réparation, reprise et poursuite en quelques heures</span></div>
+
+    <div class="matrix-cell row-label">Qui peut l'utiliser</div>
+    <div class="matrix-cell">Équipes ML<span class="matrix-sub">Nécessite encore une mise en place technique</span></div>
+    <div class="matrix-cell">Utilisateurs techniques<span class="matrix-sub">Prompts plus revue de code requis</span></div>
+    <div class="matrix-cell">Un data scientist<span class="matrix-sub">Souvent un goulot d'étranglement pour les autres</span></div>
+    <div class="matrix-cell octopus"><span class="matrix-strong">Data scientists et autres professionnels</span><span class="matrix-sub">Ventes, finance, croissance, ops et analystes font de la data science dans leur métier</span></div>
+
+    <div class="matrix-cell row-label">Délai jusqu'à une réponse utile</div>
+    <div class="matrix-cell">Des jours à des semaines</div>
+    <div class="matrix-cell">Ça dépend de vous</div>
+    <div class="matrix-cell">Des semaines à des mois</div>
+    <div class="matrix-cell octopus" style="color:var(--purple);font-weight:500">Des heures</div>
+  </div>
+
+  <p class="reveal" style="margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:0.1em;max-width:780px;line-height:1.6">
+    POURQUOI MAINTENANT · C'était impossible il y a 18 mois. L'IA ne comprenait pas pourquoi elle se trompait. Aujourd'hui, si — ce qui veut dire que votre équipe obtient des modèles fiables et déployés dès aujourd'hui, pas après un cycle de recrutement ou un projet BI de six mois.
+  </p>
+</section>
+
+<!-- ============ SLIDE 7: BUSINESS MODEL ============ -->
+<section class="slide" id="s7">
+  <div class="slide-num">007 / 009</div>
+  <div class="slide-tag">TARIFS</div>
+  <div class="eyebrow reveal">Une tarification simple et transparente</div>
+  <h2 class="reveal" style="font-size:clamp(36px,5vw,64px);font-weight:300;max-width:1000px">
+    De <em style="color:var(--purple);font-style:italic">20 $ par mois</em><br>au déploiement en entreprise.
+  </h2>
+
+  <div class="tiers">
+    <div class="tier reveal">
+      <div class="tier-name">Pour les particuliers</div>
+      <div class="tier-price">20 $<em>/mois</em></div>
+      <div class="tier-desc">Un étudiant, un consultant ou un analyste qui veut des réponses de ses données — sans recruter personne.</div>
+      <ul>
+        <li>Utilisation sans limite</li>
+        <li>Importez n'importe quel tableur</li>
+        <li>Obtenez un modèle fonctionnel</li>
+        <li>Téléchargez un rapport soigné</li>
+      </ul>
+    </div>
+    <div class="tier featured reveal">
+      <div class="tier-name">Pour les équipes</div>
+      <div class="tier-price">500–2K $<em>/mois</em></div>
+      <div class="tier-desc">Une petite équipe qui a besoin de nombreuses prédictions mais ne peut pas recruter plus de data scientists.</div>
+      <ul>
+        <li>Accès pour toute l'équipe</li>
+        <li>Se connecte à vos systèmes</li>
+        <li>Rapports sur mesure</li>
+        <li>Support e-mail + chat</li>
+      </ul>
+    </div>
+    <div class="tier reveal">
+      <div class="tier-name">Pour les grands groupes</div>
+      <div class="tier-price">Sur mesure<em></em></div>
+      <div class="tier-desc">Une grande entreprise qui veut OctOpus dans ses outils existants, selon ses règles de sécurité.</div>
+      <ul>
+        <li>Fonctionne dans votre environnement</li>
+        <li>Support dédié</li>
+        <li>Mise en place accompagnée</li>
+        <li>Paiement au résultat</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="reveal" style="margin-top:48px;font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:0.1em;max-width:900px;line-height:1.7">
+    AU RÉSULTAT · Pour l'entreprise, nous pouvons facturer au résultat livré — pas au siège. Vous payez pour des résultats, la valeur est donc claire dès le premier jour. Commencez par un PoC payant et passez à l'échelle seulement une fois qu'il a fait ses preuves sur vos données.
+  </p>
+</section>
+
+<!-- ============ SLIDE 8: FOUNDER ============ -->
+<section class="slide" id="s8">
+  <div class="slide-num">008 / 009</div>
+  <div class="slide-tag">POURQUOI NOUS FAIRE CONFIANCE</div>
+  <div class="founder">
+    <div class="founder-topline reveal">Conçu par un data scientist</div>
+    <div class="founder-card reveal">
+      <div class="founder-name">Doudou BA</div>
+      <div class="founder-role">FONDATEUR · IA D'ENTREPRISE & MACHINE LEARNING</div>
+      <p class="founder-bio">
+        OctOpus est conçu par quelqu'un qui a déployé de l'IA en production au sein d'un groupe mondial — pas une surcouche sur le modèle d'un autre. Recherche ML approfondie, vraie expérience du déploiement en entreprise et travail direct avec le type de données et d'exigences de fiabilité de votre équipe. Le raisonnement qui rend OctOpus digne de confiance sur vos données vient d'années passées à faire ce travail à la main.
+      </p>
+      <div class="founder-creds">
+        <div class="cred"><span class="cred-label">FORMATION</span><span class="cred-val">Doctorat en Machine Learning · Université Charles · MSc Génie Logiciel (Blekinge) · MSc Data Science (CZU)</span></div>
+        <div class="cred"><span class="cred-label">RECHERCHE</span><span class="cred-val">4 publications évaluées par les pairs en prévision, hydrologie et systèmes ML</span></div>
+        <div class="cred"><span class="cred-label">MAERSK</span><span class="cred-val">IA et automatisation en production utilisées dans 130+ pays · le type de fiabilité où quelques minutes d'interruption coûtent cher</span></div>
+        <div class="cred"><span class="cred-label">DÉPLOIEMENT</span><span class="cred-val">Fonctionne dans votre environnement, sur votre entrepôt, selon vos règles de sécurité — vos données restent les vôtres</span></div>
+        <div class="cred"><span class="cred-label">DISTINCTIONS</span><span class="cred-val">Lauréat — catégorie IA Big Angels Day · Lauréat — Hackathon IA du PNUD · plusieurs Maersk Star Awards</span></div>
+        <div class="cred"><span class="cred-label">ÉCOSYSTÈME</span><span class="cred-val">NVIDIA Inception · Founders Inc · AI Sweden Ignite · AWS for Startups · Crédits Google Cloud · Station F Fighters</span></div>
+      </div>
+    </div>
+    <div class="founder-side">
+      <div class="founder-photo reveal">
+        <img src="doudou ba.PNG" alt="Doudou Ba" />
+      </div>
+      <p class="founder-quote reveal">
+        Une IA d'entreprise <em>réellement fiable</em> — parce qu'elle a été conçue par quelqu'un qui en a porté la responsabilité.
+        <span class="sig">— L'expertise derrière OctOpus</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9: ASK ============ -->
+<section class="slide ask" id="s9">
+  <div class="slide-num">009 / 009</div>
+  <div class="slide-tag">LANCER UN POC</div>
+  <img class="sticker" src="sticker-wow.png" alt="" style="top:18%;left:6%;width:170px;--rot:-12deg" />
+
+  <div class="ask-mascot">
+    <img src="octopus-mascot.webp" alt="OctOpus mascot" style="width:100%;height:100%;image-rendering:pixelated;object-fit:contain" />
+  </div>
+
+  <div class="eyebrow" style="opacity:1">PREUVE DE CONCEPT · VOS DONNÉES · VOTRE ENVIRONNEMENT</div>
+  <h1 class="ask-title">
+    Lancez une preuve de concept<br>
+    sur <em>vos propres données</em><br>
+    en semaines, pas en trimestres.
+  </h1>
+
+  <!-- HOW A POC WORKS -->
+  <div style="max-width:880px;width:100%;margin:6px auto 8px;display:flex;justify-content:space-between;align-items:baseline">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-dim)">COMMENT SE DÉROULE UN POC</div>
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--purple)">~2–4 SEMAINES · RISQUE FAIBLE</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ink-faint);border:1px solid var(--ink-faint);max-width:880px;width:100%;margin:0 auto 24px;text-align:left">
+    <div style="background:var(--bg);padding:16px 18px">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--purple);margin-bottom:10px">01 · CONNECTER</div>
+      <div style="font-family:var(--serif);font-size:18px;font-weight:300;line-height:1.3;margin-bottom:6px">Choisissez un problème réel</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);line-height:1.6">Nous connectons OctOpus à un jeu de données dans votre environnement. Vos données restent les vôtres.</div>
+    </div>
+    <div style="background:var(--bg);padding:16px 18px">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--purple);margin-bottom:10px">02 · CONSTRUIRE</div>
+      <div style="font-family:var(--serif);font-size:18px;font-weight:300;line-height:1.3;margin-bottom:6px">Voyez-le résolu</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);line-height:1.6">OctOpus analyse, construit le modèle et les tableaux de bord, et remplit un vrai rapport — sur vos données.</div>
+    </div>
+    <div style="background:var(--bg);padding:16px 18px">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--purple);margin-bottom:10px">03 · DÉCIDER</div>
+      <div style="font-family:var(--serif);font-size:18px;font-weight:300;line-height:1.3;margin-bottom:6px">Gardez-le ou laissez tomber</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);line-height:1.6">Vous voyez le résultat avant de vous engager. Prouvez la valeur, puis déployez à toute votre équipe.</div>
+    </div>
+  </div>
+
+  <a href="https://www.octoopus.dev/" class="ask-cta" target="_blank">
+    <span>Lancer un PoC</span>
+    <span class="arrow">→</span>
+  </a>
+
+  <div class="footer-info">
+    <div>OCTOPUS · <span>IA D'ENTREPRISE</span></div>
+    <div>DÉPLOIEMENT · <span>VOTRE ENVIRONNEMENT</span></div>
+    <div>DÉLAI DE VALEUR · <span>SEMAINES</span></div>
+    <div>PROCHAINE ÉTAPE · <span>LANCER UN POC</span></div>
+  </div>
+</section>
+
+<script>
+  document.body.classList.remove('no-js');
+  document.body.classList.add('enhanced');
+
+  // smooth scroll
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // keyboard slide navigation: arrows/space/page keys jump one slide instead of scrolling
+  const slides = Array.from(document.querySelectorAll('section.slide'));
+  function currentSlideIndex() {
+    let idx = 0;
+    slides.forEach((s, i) => { if (s.offsetTop <= window.scrollY + 2) idx = i; });
+    return idx;
+  }
+  function goToSlide(i) {
+    const clamped = Math.max(0, Math.min(slides.length - 1, i));
+    slides[clamped].scrollIntoView({ behavior: 'smooth' });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const next = (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey));
+    const prev = (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey));
+    if (next) {
+      e.preventDefault();
+      goToSlide(currentSlideIndex() + 1);
+    } else if (prev) {
+      e.preventDefault();
+      goToSlide(currentSlideIndex() - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goToSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goToSlide(slides.length - 1);
+    }
+  });
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    document.body.classList.remove('enhanced');
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
+
+  const localImages = document.querySelectorAll('img[src$=".webp"], img[src$=".png"]');
+  localImages.forEach((img) => {
+    img.loading = 'eager';
+    img.decoding = 'sync';
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+      const parentSticker = img.closest('.sticker, .ask-mascot, .mascot');
+      if (parentSticker) {
+        parentSticker.classList.add('asset-missing');
+      }
+    });
+    if (img.complete && img.naturalWidth === 0) {
+      img.dispatchEvent(new Event('error'));
+    } else if (!img.complete && typeof img.decode === 'function') {
+      img.decode().catch(() => {
+        img.dispatchEvent(new Event('error'));
+      });
+    }
+  });
+
+</script>
+
+</body>
+</html>
